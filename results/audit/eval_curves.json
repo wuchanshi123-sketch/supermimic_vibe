@@ -666,6 +666,24 @@
 "clips": 40
 },
 {
+"run": "ppo_lafan1_1gpu",
+"label": "PPO-Sim, 1 GPU",
+"iteration": 19679,
+"hours": 18.0006,
+"norm_return": 0.5429,
+"failed": 8,
+"clips": 40
+},
+{
+"run": "ppo_lafan1_1gpu",
+"label": "PPO-Sim, 1 GPU",
+"iteration": 19679,
+"hours": 18.0006,
+"norm_return": 0.543,
+"failed": 7,
+"clips": 40
+},
+{
 "run": "abl_H8_critic_true",
 "label": "H=8, critic",
 "iteration": 8000,
@@ -1233,12 +1251,66 @@
 "clips": 40
 },
 {
+"run": "smimic_lafan1_2gpu",
+"label": "SuperMimic H=32, 2 GPUs (data parallel)",
+"iteration": 56000,
+"hours": 5.194,
+"norm_return": 0.9342,
+"failed": 0,
+"clips": 40
+},
+{
+"run": "smimic_lafan1_2gpu",
+"label": "SuperMimic H=32, 2 GPUs (data parallel)",
+"iteration": 60000,
+"hours": 5.557,
+"norm_return": 0.936,
+"failed": 0,
+"clips": 40
+},
+{
+"run": "smimic_lafan1_2gpu",
+"label": "SuperMimic H=32, 2 GPUs (data parallel)",
+"iteration": 64000,
+"hours": 5.9185,
+"norm_return": 0.9361,
+"failed": 0,
+"clips": 40
+},
+{
+"run": "smimic_lafan1_2gpu",
+"label": "SuperMimic H=32, 2 GPUs (data parallel)",
+"iteration": 64905,
+"hours": 6.0,
+"norm_return": 0.938,
+"failed": 0,
+"clips": 40
+},
+{
 "run": "abl_H128_critic_true",
 "label": "H=128, critic",
 "iteration": 8000,
 "hours": 2.6891,
 "norm_return": 0.4604,
 "failed": 15,
+"clips": 40
+},
+{
+"run": "abl_H128_critic_true",
+"label": "H=128, critic",
+"iteration": 16000,
+"hours": 5.283,
+"norm_return": 0.5562,
+"failed": 13,
+"clips": 40
+},
+{
+"run": "abl_H128_critic_true",
+"label": "H=128, critic",
+"iteration": 18208,
+"hours": 6.0003,
+"norm_return": 0.5385,
+"failed": 14,
 "clips": 40
 },
 {
@@ -1283,6 +1355,24 @@
 "iteration": 40000,
 "hours": 4.5613,
 "norm_return": 0.9197,
+"failed": 1,
+"clips": 40
+},
+{
+"run": "abl_H64_critic_false",
+"label": "H=64, no critic",
+"iteration": 48000,
+"hours": 5.4495,
+"norm_return": 0.9401,
+"failed": 0,
+"clips": 40
+},
+{
+"run": "abl_H64_critic_false",
+"label": "H=64, no critic",
+"iteration": 52960,
+"hours": 6.0,
+"norm_return": 0.9133,
 "failed": 1,
 "clips": 40
 },
@@ -1382,6 +1472,24 @@
 "iteration": 88000,
 "hours": 10.4538,
 "norm_return": 0.9541,
+"failed": 0,
+"clips": 18
+},
+{
+"run": "vel_rl",
+"label": "Velocity encoder, RL",
+"iteration": 96000,
+"hours": 11.3393,
+"norm_return": 0.9553,
+"failed": 0,
+"clips": 18
+},
+{
+"run": "vel_rl",
+"label": "Velocity encoder, RL",
+"iteration": 100000,
+"hours": 11.7859,
+"norm_return": 0.9546,
 "failed": 0,
 "clips": 18
 },

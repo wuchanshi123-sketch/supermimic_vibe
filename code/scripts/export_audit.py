@@ -198,7 +198,7 @@ def claims(data):
   rows = [
     ("C1", "Fig. 3a", "SuperMimic reaches return 0.82 on LAFAN1 within 1.2 h on one GPU",
      "0.82 within 1.2 h (H100)",
-     (f"{sm82['norm_return']:.3f} at {sm82['hours']:.2f} h (A6000), {sm82['failed']}/40 failed; best so far {best('smimic_lafan1_1gpu')['norm_return']:.3f} "
+     (f"{sm82['norm_return']:.3f} at {sm82['hours']:.2f} h (A6000), {sm82['failed']}/40 failed; best {best('smimic_lafan1_1gpu')['norm_return']:.3f} "
       f"at {best('smimic_lafan1_1gpu')['hours']:.2f} h, {best('smimic_lafan1_1gpu')['failed']}/40 failed") if sm82 else "not yet",
      "Reproduced" if sm82 else "In progress"),
     ("C2", "Fig. 3a", "PPO-Sim (1 GPU) does not reach 0.82 within 18 h; final return 0.60",

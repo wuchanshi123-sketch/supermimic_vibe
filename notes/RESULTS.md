@@ -4,17 +4,21 @@ Hardware: NVIDIA RTX A6000 (48 GB) on Princeton Ionic `pci`; the paper used H100
 All hours below are training wall-clock on one A6000 (evaluation excluded, as in the paper;
 the first ~6 min include one-time torch.compile).
 
-## Status (2026-10-21, evening)
+## Status (2026-10-22 16:05Z)
 
-| Experiment (paper ref.) | Run | Status |
-| --- | --- | --- |
-| LAFAN1 controlled comparison, SuperMimic 1 GPU (Fig. 3a) | `runs/smimic_lafan1_1gpu` | running (12 h budget) |
-| LAFAN1 PPO-Sim 1 GPU (Fig. 3a) | `runs/ppo_lafan1_1gpu` | running (18 h budget) |
-| Horizon × critic ablation (Fig. 3b,c) | `runs/abl_H*_critic_*` | H32/no-critic running; H8, H16 ×2, H64 queued |
-| Rollout speed (Fig. 4a) | `results/bench_rollout_a6000.json` | done up to 16k envs |
-| PPO-WM vs BPTT (Fig. 4b) | `code/supermimic/ppo_wm.py` | implemented, smoke-tested |
-| BONES-SEED 129,514 motions vs SONIC (Fig. 2a, Table A.4) | — | **blocked: dataset is license-gated; needs the user's HF token** |
-| Dataset-length sweep (Fig. 2b,c) | — | blocked on BONES-SEED |
+| Experiment (paper ref.) | Run | Result | Status |
+| --- | --- | --- | --- |
+| LAFAN1, SuperMimic 1 GPU (Fig. 3a) | `runs/smimic_lafan1_1gpu` | 0.82 @ 1.34 h; 0.946 (0/40) @ 12 h | reproduced |
+| LAFAN1, PPO-Sim 1 GPU (Fig. 3a) | `runs/ppo_lafan1_1gpu` | 0.543 (7/40) @ 18 h (paper 0.60) | reproduced |
+| LAFAN1, SuperMimic 2 GPUs data parallel | `runs/smimic_lafan1_2gpu` | 0.938 (0/40) @ 6 h | extra |
+| Horizon x critic ablation (Fig. 3b,c) | `runs/abl_H*_critic_*` | 8 runs, H = 8-128 | reproduced (trend), partly (timings) |
+| Rollout speed (Fig. 4a) | `results/bench_rollout_a6000.json` | 15-22x at 2k-16k envs | reproduced (32k+ not measurable) |
+| PPO-WM vs BPTT (Fig. 4b) | `runs/f4b_*` | 27x at PPO-WM's best return | partly reproduced |
+| Push recovery (Sec. 5.3) | `results/push_test.json` | 6/64 vs 19/64 falls | partly reproduced |
+| Velocity step test (Sec. 5.5, App. G) | `runs/vel_*`, `results/step_test.json` | RL better on 652/672 (paper 650) | reproduced |
+| BONES-SEED vs SONIC (Fig. 2a, Table A.4) | — | — | **blocked: dataset is license-gated; needs the user's HF token** |
+| Dataset-length sweep (Fig. 2b,c), filtering (App. E) | — | — | blocked on BONES-SEED |
+| PPO-Sim 4/8 GPUs (Fig. 3a) | — | — | not run (needs 4-8 shared GPUs) |
 
 ## Early numbers
 
@@ -160,3 +164,52 @@ Per plane (median rel. error, RL / distill): vx-vy 0.051 / 0.344, vx-wz 0.039 / 
 vy-wz 0.040 / 0.237. Direction reproduced (RL velocity interface tracks far better); our absolute
 errors are lower than the paper's for both, and our distilled interface never falls in all trials.
 Final run queued as job 31946447 (after the RL run reaches 100k iterations).
+
+## PPO-Sim final (Fig. 3a, claim C2) — 2026-10-22 15:22Z
+
+PPO-Sim, 1 x A6000, 18 h of training (19,679 iterations, 8192 envs): final benchmark 0.543 with 7/40
+clips failed (the same checkpoint evaluated twice at the end gave 0.5429 / 8 failed and 0.5430 / 7
+failed); best 0.552 @ 17.0 h. Paper: 0.60 after 18 h on one GPU, never reaching 0.82. Reproduced:
+PPO-Sim stays far below SuperMimic, which passed 0.82 at 1.34 h and ended at 0.946 (0/40) after 12 h.
+Note the A6000 runs the MLP-heavy SuperMimic update ~2.7x slower than an H100 while MuJoCo Warp is
+about as fast, so this wall-clock comparison favours PPO-Sim relative to the paper's setup.
+
+## Velocity step test (App. G, claim C14) — final 2026-10-22 15:40Z, results/step_test.json
+
+RL velocity interface (runs/vel_rl, 100k iterations, motion interface 0.955 on the 18
+walk/run/sprint clips) vs distilled interface (runs/vel_distill, 100k iterations, 0.952), same
+protocol as the smoke run above (672 commands x 4 trials from standing, 5 s each, error over the
+last 2 s). Job 31946447.
+
+| | ours (final) | ours (smoke, RL at 88k) | paper |
+| --- | --- | --- | --- |
+| RL better / distill better (of 672) | 652 / 20 | 659 / 13 | 650 / 15 |
+| median rel. error RL / distill | 0.042 / 0.222 | 0.043 / 0.223 | 0.16 / 0.49 |
+| commands where distill fell in all trials | 0 | 0 | 7 |
+
+Per plane (median rel. error, RL / distill): vx-vy 0.045 / 0.343, vx-wz 0.040 / 0.149,
+vy-wz 0.042 / 0.235; 90th percentile 0.101 / 0.543. Reproduced: the RL-trained velocity encoder
+beats distillation on 652 of 672 commands (paper 650). Both of our interfaces track with lower
+absolute error than the paper's and neither falls on every trial of any command; our velocity
+study uses only LAFAN1 walk/run/sprint (paper adds BONES-SEED walk/run), a narrower distribution.
+
+## 6 h runs finished — 2026-10-22 16:05Z
+
+- H=64 without critic (job 31945789): final 0.913 (1/40 failed), best 0.940 (0/40) @ 5.45 h; benchmark
+  0.82 first @ 3.67 h. Paper: final training return 0.862, 0.82 @ 1.34 h.
+- H=128 with critic (job 31945793, expandable segments): final 0.539 (14/40), best 0.556 @ 5.28 h;
+  0.82 not reached in 6 h (paper: 0.823 final training return, 0.82 @ 4.62 h). 1.15-1.2 s/iteration
+  (~4x H=32). The run sat at the 48 GB memory ceiling the whole time (thousands of allocator
+  remap warnings), so its per-iteration cost is an upper bound.
+- SuperMimic on 2 GPUs, data parallel (job 31945786): final 0.938 (0/40) @ 6 h (64,905 iterations,
+  0.328 s/iteration, lr x sqrt(2)); 1 GPU at the same time: 0.923 (1/40) @ 5.94 h. Benchmark 0.82 first
+  @ 1.56 h (1 GPU: 1.34 h; evals are 4000 iterations apart). Two GPUs give a higher plateau on LAFAN1
+  but not a faster start; the paper's 2-GPU result is on BONES-SEED (blocked).
+
+Ablation summary (benchmark eval, best / hours to 0.82): H=8 critic 0.483 / never (collapsed);
+H=16 no critic 0.035 / never; H=16 critic 0.905 / 2.00 h; H=32 no critic 0.899 / 3.33 h;
+H=32 critic 0.947 / 1.34 h; H=64 no critic 0.940 / 3.67 h; H=64 critic 0.914 / 3.31 h;
+H=128 critic 0.556 / never. Reproduced: critic needed at short horizons, H=32 fastest, long horizons
+much slower per iteration. Not reproduced: in the paper H=64 and H=128 still reach 0.82 within 1.7 h /
+4.6 h; ours take 3.3 h and do not get there in 6 h (A6000 is ~2.7x slower per iteration, and the paper's
+metric is training return).

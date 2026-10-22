@@ -4,7 +4,7 @@
 "where": "Fig. 3a",
 "claim": "SuperMimic reaches return 0.82 on LAFAN1 within 1.2 h on one GPU",
 "paper": "0.82 within 1.2 h (H100)",
-"ours": "0.833 at 1.34 h (A6000), 1/40 failed; best so far 0.947 at 11.42 h, 0/40 failed",
+"ours": "0.833 at 1.34 h (A6000), 1/40 failed; best 0.947 at 11.42 h, 0/40 failed",
 "status": "Reproduced"
 },
 {
@@ -12,8 +12,8 @@
 "where": "Fig. 3a",
 "claim": "PPO-Sim (1 GPU) does not reach 0.82 within 18 h; final return 0.60",
 "paper": "0.60 after 18 h",
-"ours": "0.523 at 17.5 h of 18 h",
-"status": "In progress"
+"ours": "0.543 at 18.0 h of 18 h",
+"status": "Reproduced"
 },
 {
 "id": "C3",
@@ -44,7 +44,7 @@
 "where": "Fig. 3c",
 "claim": "H=32 reaches 0.82 fastest; H 64 -> 128 nearly triples the time",
 "paper": "0.88 h (H=32) vs 1.70 h (H=64), 4.62 h (H=128)",
-"ours": "benchmark 0.82 at 1.34 h (H=32) vs 3.31 h (H=64) vs 2.00 h (H=16) vs not reached (H=128, best 0.460 at 2.7 h of 5.1 h trained, ~4x the per-iteration cost of H=32)",
+"ours": "benchmark 0.82 at 1.34 h (H=32) vs 3.31 h (H=64) vs 2.00 h (H=16) vs not reached (H=128, best 0.556 at 5.3 h of 6.0 h trained, ~4x the per-iteration cost of H=32)",
 "status": "Partly reproduced"
 },
 {
@@ -108,8 +108,8 @@
 "where": "Sec. 5.5",
 "claim": "RL-trained velocity encoder beats distillation on 650 of 672 step responses",
 "paper": "650 / 672",
-"ours": "RL lower error on 659 of 672, distillation on 13; median relative error 0.043 vs 0.223 (paper 0.16 vs 0.49); distillation fell on all trials of 0 commands (paper 7); trained on LAFAN1 walk/run/sprint only [smoke run: RL checkpoint at 88000 of 100k iterations; final run queued]",
-"status": "In progress"
+"ours": "RL lower error on 652 of 672, distillation on 20; median relative error 0.042 vs 0.222 (paper 0.16 vs 0.49); distillation fell on all trials of 0 commands (paper 7); trained on LAFAN1 walk/run/sprint only",
+"status": "Reproduced"
 },
 {
 "id": "C15",
