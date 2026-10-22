@@ -45,14 +45,22 @@ def velocities(root_pos, root_quat, dof, dt):
   return lin, ang, dof_vel
 
 
-def load_bones_csv(path):
+def _lines(src):
+  """CSV lines from a file path, or from the bytes of a tar member."""
+  if isinstance(src, bytes):
+    return src.decode().splitlines()
+  with open(src) as f:
+    return f.read().splitlines()
+
+
+def load_bones_csv(src):
   """BONES-SEED G1 CSV: header row; Frame, root_translate{X,Y,Z} (cm),
   root_rotate{X,Y,Z} (deg, scipy 'xyz' as in SONIC's converter), 29 *_dof (deg)."""
   from scipy.spatial.transform import Rotation
 
-  with open(path) as f:
-    header = f.readline().strip().split(",")
-  a = np.loadtxt(path, delimiter=",", skiprows=1, ndmin=2)
+  lines = _lines(src)
+  header = lines[0].strip().split(",")
+  a = np.loadtxt(lines[1:], delimiter=",", ndmin=2)
   col = {n: i for i, n in enumerate(header)}
   pos = a[:, [col["root_translateX"], col["root_translateY"], col["root_translateZ"]]] / 100.0
   eul = a[:, [col["root_rotateX"], col["root_rotateY"], col["root_rotateZ"]]]
@@ -63,8 +71,8 @@ def load_bones_csv(path):
   return torch.tensor(pos), torch.tensor(quat), torch.tensor(dof)
 
 
-def load_lafan_csv(path):
-  a = np.loadtxt(path, delimiter=",")
+def load_lafan_csv(src):
+  a = np.loadtxt(_lines(src), delimiter=",")
   pos = torch.tensor(a[:, :3])
   quat = torch.tensor(a[:, [6, 3, 4, 5]])  # xyzw -> wxyz
   dof = torch.tensor(a[:, 7:])
@@ -72,11 +80,11 @@ def load_lafan_csv(path):
 
 
 def convert_one(job):
-  f, fmt, fps_in, fps_out = job
+  name, src, fmt, fps_in, fps_out = job
   try:
-    pos, quat, dof = (load_bones_csv if fmt == "bones" else load_lafan_csv)(f)
+    pos, quat, dof = (load_bones_csv if fmt == "bones" else load_lafan_csv)(src)
   except Exception as e:  # noqa: BLE001
-    print("skip", f, e)
+    print("skip", name, e)
     return None
   if pos.shape[0] < 3:
     return None
@@ -95,33 +103,71 @@ def convert_one(job):
   )
 
 
+def tar_batches(path, batch):
+  """(name, bytes) of every CSV member, read sequentially in batches of `batch`, so the
+  archive is never unpacked to disk (it holds ~142k small files)."""
+  import tarfile
+
+  buf = []
+  with tarfile.open(path, mode="r|*") as tf:
+    for m in tf:
+      if m.isfile() and m.name.endswith(".csv"):
+        buf.append((m.name, tf.extractfile(m).read()))
+        if len(buf) == batch:
+          yield buf
+          buf = []
+  if buf:
+    yield buf
+
+
 def main():
   ap = argparse.ArgumentParser()
-  ap.add_argument("--input", required=True, help="directory with CSV clips (searched recursively)")
+  ap.add_argument("--input", required=True, help="directory with CSV clips (searched recursively), or a .tar/.tar.gz of them")
   ap.add_argument("--output", required=True)
   ap.add_argument("--fps-in", type=float, default=30.0)
   ap.add_argument("--fps-out", type=float, default=50.0)
   ap.add_argument("--format", default="lafan", choices=["lafan", "bones"])
   ap.add_argument("--workers", type=int, default=1)
+  ap.add_argument("--strip-prefix", default="", help="tar input: prefix removed from member names")
   args = ap.parse_args()
 
-  files = sorted(glob.glob(os.path.join(args.input, "**", "*.csv"), recursive=True))
-  print(f"{len(files)} clips")
-  job = [(f, args.format, args.fps_in, args.fps_out) for f in files]
+  pool = None
   if args.workers > 1:
     import multiprocessing as mp
 
-    with mp.get_context("spawn").Pool(args.workers) as pool:
-      results = pool.map(convert_one, job, chunksize=64)
+    pool = mp.get_context("spawn").Pool(args.workers)
+
+  def convert(jobs):
+    if pool is not None:
+      return pool.map(convert_one, jobs, chunksize=16)
+    return [convert_one(j) for j in jobs]
+
+  pairs = []  # (name, (qpos, qvel))
+  if os.path.isdir(args.input):
+    files = sorted(glob.glob(os.path.join(args.input, "**", "*.csv"), recursive=True))
+    print(f"{len(files)} clips")
+    results = convert([(f, f, args.format, args.fps_in, args.fps_out) for f in files])
+    pairs = [(os.path.relpath(f, args.input), r) for f, r in zip(files, results)]
   else:
-    results = [convert_one(j) for j in job]
+    seen = 0
+    for batch in tar_batches(args.input, 2048):
+      results = convert([(n, b, args.format, args.fps_in, args.fps_out) for n, b in batch])
+      for (n, _), r in zip(batch, results):
+        if n.startswith(args.strip_prefix):
+          n = n[len(args.strip_prefix):]
+        pairs.append((n, r))
+      seen += len(batch)
+      print(f"{seen} clips read", flush=True)
+    pairs.sort(key=lambda x: x[0])
+  if pool is not None:
+    pool.close()
   qpos_all, qvel_all, names, lengths = [], [], [], []
-  for f, r in zip(files, results):
+  for n, r in pairs:
     if r is None:
       continue
     qpos_all.append(r[0])
     qvel_all.append(r[1])
-    names.append(os.path.relpath(f, args.input))
+    names.append(n)
     lengths.append(r[0].shape[0])
   lengths = np.array(lengths, dtype=np.int64)
   starts = np.concatenate([[0], np.cumsum(lengths)[:-1]])
@@ -135,7 +181,7 @@ def main():
     fps=np.array(args.fps_out),
   )
   hours = lengths.sum() / args.fps_out / 3600
-  print(f"saved {args.output}: {len(names)} clips, {lengths.sum()} frames, {hours:.3f} h")
+  print(f"saved {args.output}: {len(names)} clips ({len(pairs) - len(names)} skipped), {lengths.sum()} frames, {hours:.3f} h")
 
 
 if __name__ == "__main__":
