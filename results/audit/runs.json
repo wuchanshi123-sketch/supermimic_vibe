@@ -152,5 +152,60 @@
 "train_hours": 10.286,
 "log": "runs/vel_distill/log.jsonl",
 "evals": "runs/vel_distill/eval.jsonl"
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"figure": "Fig. 2a",
+"slurm_job": "31950477",
+"status": "running",
+"iterations": 6600,
+"train_hours": 0.643,
+"log": "runs/smimic_bones_1gpu/log.jsonl",
+"evals": "runs/smimic_bones_1gpu/eval.jsonl"
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"figure": "Fig. 2a",
+"slurm_job": "31950519",
+"status": "running",
+"iterations": 4300,
+"train_hours": 0.466,
+"log": "runs/smimic_bones_2gpu/log.jsonl",
+"evals": "runs/smimic_bones_2gpu/eval.jsonl"
+},
+{
+"run": "sweep_bones_1h",
+"label": "Dataset sweep, 1 h of BONES-SEED",
+"figure": "Fig. 2b,c",
+"slurm_job": "31950522",
+"status": "running",
+"iterations": 4100,
+"train_hours": 0.44,
+"log": "runs/sweep_bones_1h/log.jsonl",
+"evals": "runs/sweep_bones_1h/eval.jsonl"
+},
+{
+"run": "sweep_bones_7h",
+"label": "Dataset sweep, 7 h of BONES-SEED",
+"figure": "Fig. 2b,c",
+"slurm_job": "31950523",
+"status": "running",
+"iterations": 4200,
+"train_hours": 0.432,
+"log": "runs/sweep_bones_7h/log.jsonl",
+"evals": "runs/sweep_bones_7h/eval.jsonl"
+},
+{
+"run": "sweep_bones_40h",
+"label": "Dataset sweep, 40 h of BONES-SEED",
+"figure": "Fig. 2b,c",
+"slurm_job": "31950524",
+"status": "running",
+"iterations": 3900,
+"train_hours": 0.431,
+"log": "runs/sweep_bones_40h/log.jsonl",
+"evals": "runs/sweep_bones_40h/eval.jsonl"
 }
 ]

@@ -76,32 +76,32 @@
 "where": "Fig. 2a, Table A.4",
 "claim": "On 129,514 BONES-SEED motions, 1 GPU x 3 h beats SONIC (return 0.90; 25 vs 179 failed); 2 GPUs x 9.8 h: 0 failed",
 "paper": "25 / 0 failed vs SONIC 179",
-"ours": "BONES-SEED is license-gated; waiting for the user's HuggingFace access",
-"status": "Blocked"
+"ours": "BONES-SEED runs started",
+"status": "In progress"
 },
 {
 "id": "C11",
 "where": "Fig. 2b,c",
 "claim": "From 1 to 264 h of motion, 8-step WM error stays 0.007-0.011 and GPU-hours to target grow slowly",
 "paper": "0.54 -> 1.89 GPU-h",
-"ours": "needs BONES-SEED",
-"status": "Blocked"
+"ours": "1h: 0.429 after 0.4 h, 8-step WM error 0.376; 7h: 0.562 after 0.4 h, 8-step WM error 0.239; 40h: 0.633 after 0.4 h, 8-step WM error 0.172; 261 h: 0.746 after 0.6 h, 8-step WM error 0.150 (our WM error is normalized by the one-step delta std, not the paper's nominal error)",
+"status": "In progress"
 },
 {
 "id": "C12",
 "where": "Sec. 5.1",
 "claim": ">1000x fewer GPU-hours than SONIC (21k GPU-h)",
 "paper": "3 GPU-h vs ~21,000",
-"ours": "needs BONES-SEED and SONIC evaluated in our simulator",
-"status": "Blocked"
+"ours": "needs SuperMimic and SONIC scored on BONES-SEED",
+"status": "In progress"
 },
 {
 "id": "C13",
 "where": "App. E",
 "claim": "Filtering keeps 129,514 of 142,220 BONES-SEED clips",
 "paper": "142,220 -> 129,667 -> 129,514",
-"ours": "filter script written; needs the data",
-"status": "Blocked"
+"ours": "142,220 -> 129,115 -> 128,904 (261.29 h); the name filter's exact keyword list is not given in the paper",
+"status": "Reproduced"
 },
 {
 "id": "C14",

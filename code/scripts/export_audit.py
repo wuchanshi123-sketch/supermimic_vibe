@@ -30,6 +30,11 @@ RUNS = {
   "abl_H64_critic_false": ("H=64, no critic", "Fig. 3b,c", "31945789"),
   "vel_rl": ("Velocity encoder, RL", "Fig. 6 / Sec. 5.5", "31941569"),
   "vel_distill": ("Velocity encoder, distillation", "Fig. 6 / Sec. 5.5", "31941570"),
+  "smimic_bones_1gpu": ("SuperMimic, BONES-SEED, 1 GPU", "Fig. 2a", "31950477"),
+  "smimic_bones_2gpu": ("SuperMimic, BONES-SEED, 2 GPUs", "Fig. 2a", "31950519"),
+  "sweep_bones_1h": ("Dataset sweep, 1 h of BONES-SEED", "Fig. 2b,c", "31950522"),
+  "sweep_bones_7h": ("Dataset sweep, 7 h of BONES-SEED", "Fig. 2b,c", "31950523"),
+  "sweep_bones_40h": ("Dataset sweep, 40 h of BONES-SEED", "Fig. 2b,c", "31950524"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.
@@ -194,6 +199,74 @@ def claims(data):
       med = per["0.5"]["settle_s_median"]
       out.append(f"{tag}: {falls}/{n} pushes fell ({fall4}/8 at 4 m/s), settles in {med:.1f} s median at 0.5 m/s")
     return "; ".join(out) + " (matched benchmark return ~0.90)"
+  # BONES-SEED: filter counts, SONIC in our simulator, SuperMimic checkpoints, length sweep.
+  def _load(name):
+    path = os.path.join(ROOT, "results", name)
+    return json.load(open(path)) if os.path.exists(path) else None
+  bfilter = _load("bones_filter.json")
+  sonic = _load("sonic_bones_gains.json")
+  sonic_full = _load("sonic_bones_full.json")
+  b1, b2 = ev.get("smimic_bones_1gpu", []), ev.get("smimic_bones_2gpu", [])
+
+  def filter_text():
+    if not bfilter:
+      return "filter script written; data downloaded, filter pending"
+    return (f"{bfilter['raw']:,} -> {bfilter['after_name_filter']:,} -> {bfilter['after_feasibility_filter']:,} "
+            f"({bfilter['hours']:.2f} h); the name filter's exact keyword list is not given in the paper")
+
+  def bones_text():
+    if not b1 and not sonic:
+      return "BONES-SEED runs started"
+    parts = []
+    if sonic:
+      parts.append(f"SONIC checkpoint in our simulator: {sonic['norm_return']:.3f}, {sonic['failed']:,} failed"
+                   + (f" (with SONIC's hip motor model too: {sonic_full['norm_return']:.3f}, {sonic_full['failed']:,})" if sonic_full else ""))
+    if b1:
+      bb = max(b1, key=lambda r: r["norm_return"])
+      at8 = [r for r in b1 if r["hours"] <= 8.1]
+      a = max(at8, key=lambda r: r["norm_return"]) if at8 else None
+      parts.append(f"SuperMimic 1 A6000: best {bb['norm_return']:.3f} ({bb['failed']:,} failed) at {bb['hours']:.1f} h"
+                   + (f"; within 8.1 h (~3 H100-h): {a['norm_return']:.3f} ({a['failed']:,} failed)" if a else ""))
+      if sonic:
+        beat = next((r for r in b1 if r["norm_return"] > sonic["norm_return"]), None)
+        parts.append(f"passes SONIC's return at {beat['hours']:.2f} h" if beat else "has not passed SONIC's return yet")
+    if b2:
+      bb = max(b2, key=lambda r: r["norm_return"])
+      parts.append(f"2 A6000s: best {bb['norm_return']:.3f} ({bb['failed']:,} failed) at {bb['hours']:.1f} h")
+    return "; ".join(parts)
+
+  def bones_status():
+    if not (b1 and sonic):
+      return "In progress"
+    best = max(b1, key=lambda r: r["norm_return"])
+    if best["norm_return"] > sonic["norm_return"] and best["failed"] < sonic["failed"]:
+      return "Reproduced"
+    return "In progress" if reg.get("smimic_bones_1gpu") == "running" else "Not reproduced"
+
+  def gpuh_text():
+    if not (b1 and sonic):
+      return "needs SuperMimic and SONIC scored on BONES-SEED"
+    beat = next((r for r in b1 if r["norm_return"] > sonic["norm_return"]), None)
+    if not beat:
+      return f"SuperMimic has not passed SONIC's {sonic['norm_return']:.3f} yet"
+    return f"{beat['hours']:.2f} A6000-h to pass SONIC's return in our simulator vs ~21,000 L40-h: {21000 / beat['hours']:,.0f}x"
+
+  def sweep_text():
+    out = []
+    for h in ("1h", "7h", "40h"):
+      L = jsonl(os.path.join(ROOT, "runs", f"sweep_bones_{h}", "log.jsonl"))
+      if not L:
+        continue
+      cross = next((d["hours"] for d in L if d.get("ep_norm_return", 0) >= 0.82), None)
+      out.append(f"{h}: train return 0.82 at {cross:.2f} h" if cross else f"{h}: {L[-1].get('ep_norm_return', 0):.3f} after {L[-1]['hours']:.1f} h")
+      out[-1] += f", 8-step WM error {L[-1].get('wm_errk', 0):.3f}"
+    L = jsonl(os.path.join(ROOT, "runs", "smimic_bones_1gpu", "log.jsonl"))
+    if L:
+      cross = next((d["hours"] for d in L if d.get("ep_norm_return", 0) >= 0.82), None)
+      out.append((f"261 h: train return 0.82 at {cross:.2f} h" if cross else f"261 h: {L[-1].get('ep_norm_return', 0):.3f} after {L[-1]['hours']:.1f} h")
+                 + f", 8-step WM error {L[-1].get('wm_errk', 0):.3f}")
+    return "; ".join(out) + " (our WM error is normalized by the one-step delta std, not the paper's nominal error)" if out else "runs queued"
+
   ratios = [sp[n]["ours_world_model"] / sp[n]["ours_mjwarp"] for n in (2048, 4096, 8192, 16384) if sp[n]["ours_mjwarp"]]
   rows = [
     ("C1", "Fig. 3a", "SuperMimic reaches return 0.82 on LAFAN1 within 1.2 h on one GPU",
@@ -230,13 +303,13 @@ def claims(data):
      "critic settles 0.5-2.4 s; no critic stumbles at 0.5 m/s, falls at 4 m/s", push_text(),
      "Partly reproduced" if push else "In progress"),
     ("C10", "Fig. 2a, Table A.4", "On 129,514 BONES-SEED motions, 1 GPU x 3 h beats SONIC (return 0.90; 25 vs 179 failed); 2 GPUs x 9.8 h: 0 failed",
-     "25 / 0 failed vs SONIC 179", "BONES-SEED is license-gated; waiting for the user's HuggingFace access", "Blocked"),
+     "25 / 0 failed vs SONIC 179", bones_text(), bones_status()),
     ("C11", "Fig. 2b,c", "From 1 to 264 h of motion, 8-step WM error stays 0.007-0.011 and GPU-hours to target grow slowly",
-     "0.54 -> 1.89 GPU-h", "needs BONES-SEED", "Blocked"),
+     "0.54 -> 1.89 GPU-h", sweep_text(), "In progress" if any(reg.get(f"sweep_bones_{h}") in ("running", "queued") for h in ("1h", "7h", "40h")) else "Partly reproduced"),
     ("C12", "Sec. 5.1", ">1000x fewer GPU-hours than SONIC (21k GPU-h)",
-     "3 GPU-h vs ~21,000", "needs BONES-SEED and SONIC evaluated in our simulator", "Blocked"),
+     "3 GPU-h vs ~21,000", gpuh_text(), "In progress" if reg.get("smimic_bones_1gpu") == "running" else "Partly reproduced"),
     ("C13", "App. E", "Filtering keeps 129,514 of 142,220 BONES-SEED clips",
-     "142,220 -> 129,667 -> 129,514", "filter script written; needs the data", "Blocked"),
+     "142,220 -> 129,667 -> 129,514", filter_text(), "Reproduced" if bfilter and abs(bfilter["after_feasibility_filter"] - 129514) < 1500 else "In progress"),
     ("C14", "Sec. 5.5", "RL-trained velocity encoder beats distillation on 650 of 672 step responses",
      "650 / 672", step_text(), "Reproduced" if step_final and step and step["rl_better"] > step["distill_better"] else ("In progress" if reg.get("vel_rl") in ("running", "queued", "finished") else "Not started")),
     ("C15", "Sec. 5.4", "The policy transfers to a physical Unitree G1",

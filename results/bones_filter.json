@@ -1,0 +1,17 @@
+{
+ "raw": 142220,
+ "after_name_filter": 129115,
+ "after_feasibility_filter": 128904,
+ "feasibility_reasons": {
+  "elevated": 126,
+  "penetration": 46,
+  "floating_feet": 39
+ },
+ "hours": 261.2912666666667,
+ "paper": {
+  "raw": 142220,
+  "after_name_filter": 129667,
+  "after_feasibility_filter": 129514,
+  "hours": 264.56
+ }
+}

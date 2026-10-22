@@ -18,14 +18,28 @@ if [ ! -f "$VENV/.ready" ]; then
     fi
     rm -rf $VENV
     $LOCAL/bin/uv venv --python 3.11 $VENV
-    for attempt in 1 2 3 4; do
+    # PyPI downloads from the compute nodes fail now and then; retry for ~10 minutes.
+    for attempt in 1 2 3 4 5 6; do
       $LOCAL/bin/uv pip install --python $VENV/bin/python -r "$SMIMIC_ROOT/requirements.txt" && break
-      echo "[setup_local_env] install attempt $attempt failed; retrying in $((attempt * 15)) s"
-      sleep $((attempt * 15))
+      echo "[setup_local_env] install attempt $attempt failed; retrying in $((attempt * 30)) s"
+      sleep $((attempt * 30))
     done
     $VENV/bin/python -c "import torch, mjlab, mujoco_warp" && touch $VENV/.ready
   fi
   flock -u 9
+fi
+if [ ! -f "$VENV/.ready" ]; then
+  # Optional fallback: an existing interpreter with the same packages (slower to start
+  # from a shared filesystem). Without one, stop here instead of running half a job.
+  if [ -n "${SMIMIC_FALLBACK_PY:-}" ] && [ -x "$SMIMIC_FALLBACK_PY" ]; then
+    echo "[setup_local_env] env build failed; falling back to $SMIMIC_FALLBACK_PY"
+    export SMIMIC_PY=$SMIMIC_FALLBACK_PY
+    export WARP_CACHE_PATH=$LOCAL/warp-cache
+    mkdir -p $WARP_CACHE_PATH
+    return 0
+  fi
+  echo "[setup_local_env] could not build $VENV (package downloads failed)"
+  return 1
 fi
 export SMIMIC_PY=$VENV/bin/python
 export WARP_CACHE_PATH=$LOCAL/warp-cache

@@ -213,3 +213,23 @@ H=128 critic 0.556 / never. Reproduced: critic needed at short horizons, H=32 fa
 much slower per iteration. Not reproduced: in the paper H=64 and H=128 still reach 0.82 within 1.7 h /
 4.6 h; ours take 3.3 h and do not get there in 6 h (A6000 is ~2.7x slower per iteration, and the paper's
 metric is training return).
+
+## BONES-SEED data (App. E) — 2026-10-22 22:45Z
+
+Downloaded g1.tar.gz (23.5 GB) and metadata v004 with the user's Hugging Face access (archive kept at
+data/raw/bones/g1.tar.gz); converted by streaming the archive's CSVs (120 fps -> 50 Hz):
+data/processed/bones_seed_raw_50hz.npz, 142,220 clips, 288.35 h, 14.8 GB. Filter
+(code/scripts/filter_bones.py, results/bones_filter.json) -> data/processed/bones_seed_50hz.npz:
+
+| stage | ours | paper |
+| --- | --- | --- |
+| raw clips | 142,220 | 142,220 |
+| after name filter | 129,115 | 129,667 |
+| after feasibility filter | 128,904 (261.29 h) | 129,514 (264.56 h) |
+
+Feasibility removals: elevated support 126, ground penetration 46, floating feet 39 (211 total;
+paper 153). The name filter removes 552 clips more than the paper: the paper gives only SONIC's
+list "plus a few terms it misses"; SONIC's list plus the terms the paper names removes 12,261
+(paper 12,553), our extra terms (wall_, car_, ledge, ...) remove 844 more, a few of them false
+positives (e.g. "ledge" matches "sledgehammering"). Net: 0.5% fewer clips and 1.2% fewer hours than
+the paper's training set; not tuned further.
