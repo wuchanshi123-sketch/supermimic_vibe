@@ -51,6 +51,9 @@ class EnvCfg:
   # from it, updated on the policy's own rollouts"). Both normalize by the largest return
   # attainable over the same remaining horizon.
   reset_stat: str = "start"
+  # "traversed": bins entered with fewer steps left than this are not updated (the first
+  # traversed test run, runs/bones_fix_traversed, used 25).
+  rtg_min_steps: int = 1
   # BeyondMimic reset randomization.
   pose_range: tuple = ((-0.05, 0.05), (-0.05, 0.05), (-0.01, 0.01), (-0.1, 0.1), (-0.1, 0.1), (-0.2, 0.2))
   vel_range: tuple = ((-0.5, 0.5), (-0.5, 0.5), (-0.2, 0.2), (-0.52, 0.52), (-0.52, 0.52), (-0.78, 0.78))
@@ -425,8 +428,7 @@ class TrackingSimEnv:
     ratio = (rtg / potential.clamp_min(1e-6)).clamp(0, 1)
     b = self.lib.bin_of_frame[frames]
     entered = torch.cat([torch.ones(k, 1, dtype=torch.bool, device=dev), b[:, 1:] != b[:, :-1]], dim=1)
-    # Entries with less than 0.5 s left give too short a return to judge the bin by.
-    sel = valid & entered & (rem >= 25)
+    sel = valid & entered & (rem >= self.cfg.rtg_min_steps)
     bi, ri = b[sel], ratio[sel]
     a = self.cfg.bin_ema
     self.bin_G[bi] = torch.where(self.bin_visits[bi] > 0, (1 - a) * self.bin_G[bi] + a * ri, ri)

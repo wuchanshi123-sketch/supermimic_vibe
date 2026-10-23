@@ -158,9 +158,9 @@
 "label": "SuperMimic, BONES-SEED, 1 GPU",
 "figure": "Fig. 2a",
 "slurm_job": "31950477",
-"status": "running",
-"iterations": 140800,
-"train_hours": 11.543,
+"status": "stopped",
+"iterations": 167200,
+"train_hours": 13.628,
 "log": "runs/smimic_bones_1gpu/log.jsonl",
 "evals": "runs/smimic_bones_1gpu/eval.jsonl"
 },
@@ -214,8 +214,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953913",
 "status": "running",
-"iterations": 43500,
-"train_hours": 3.509,
+"iterations": 64000,
+"train_hours": 5.106,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -225,20 +225,31 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953914",
 "status": "running",
-"iterations": 32000,
-"train_hours": 3.715,
+"iterations": 47700,
+"train_hours": 5.481,
 "log": "runs/bones_fix_fp32/log.jsonl",
 "evals": "runs/bones_fix_fp32/eval.jsonl"
 },
 {
 "run": "bones_fix_traversed",
-"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31957454",
 "status": "running",
-"iterations": 20200,
-"train_hours": 1.763,
+"iterations": 40700,
+"train_hours": 3.438,
 "log": "runs/bones_fix_traversed/log.jsonl",
 "evals": "runs/bones_fix_traversed/eval.jsonl"
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31960983",
+"status": "queued",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/bones_fix_traversed_all/log.jsonl",
+"evals": "runs/bones_fix_traversed_all/eval.jsonl"
 }
 ]

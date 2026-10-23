@@ -417,3 +417,24 @@ Fix tests (8,192-clip benchmark subset; same scale as the full benchmark within 
 - traversed @ 1.75 h: 0.883 (69 failed); bins visited 0.83 (traversed updates cover bins much faster).
 None has reached full bin coverage yet, where the faithful run started to decline; the faithful run at
 similar hours: 0.902 (884 of 128,904, i.e. ~56 per 8,192) @ 3.04 h, 0.868 @ 1.41 h.
+
+## Check-in 2026-10-23 12:30Z
+
+The faithful 1-GPU BONES-SEED run collapsed completely: benchmark 0.525 (41,287 failed) @ 11.48 h, then
+<= 0.02 with ~127,000 of 128,904 clips failed from 11.8 h on; training episodes fell 64% of the time.
+Cancelled at 13.6 h (job 31950477 and its scorer 31950518).
+
+Fix tests (8,192-clip benchmark), all still improving:
+
+| run | trained | bins visited | latest benchmark | best |
+| --- | --- | --- | --- | --- |
+| detfrac25 | 5.11 h | 0.957 | 0.906 (36 failed) | 0.914 (44) @ 4.79 h |
+| fp32 | 5.47 h | 0.785 | 0.909 (43) | 0.909 @ 5.07 h |
+| traversed (bins entered with >= 25 steps left) | 3.43 h | 0.933 | 0.904 (41) | 0.906 (40) @ 3.05 h |
+
+None has reached full bin coverage yet (the faithful run declined right after reaching it at 5.9 h).
+The first traversed run skips bins entered with fewer than 25 steps (0.5 s) left, so short final bins
+of clips are never updated and keep G = 0; its coverage levels off near 0.93 and those bins keep the
+softmax mass, which would avoid the collapse for a different reason (resets at clip ends) and confound
+the test. New run runs/bones_fix_traversed_all (job 31960983, --rtg-min-steps 1): every bin a rollout
+enters is updated, as the paper words it.

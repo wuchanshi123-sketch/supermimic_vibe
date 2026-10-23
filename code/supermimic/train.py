@@ -58,6 +58,7 @@ class TrainCfg:
   # Reset-sampler statistic, see sim_env.EnvCfg.reset_stat ("start" was used for all runs
   # before 2026-10-23; "traversed" follows the paper's wording).
   reset_stat: str = "start"
+  rtg_min_steps: int = 1
   use_critic: bool = True
   # Bookkeeping.
   log_every: int = 100
@@ -167,7 +168,7 @@ class Trainer:
       self.load(cfg.resume)
 
   def _make_env(self):
-    return TrackingSimEnv(self.lib, EnvCfg(num_envs=self.cfg.num_envs, reset_stat=self.cfg.reset_stat), self.tcfg, self.device, gamma=self.cfg.gamma)
+    return TrackingSimEnv(self.lib, EnvCfg(num_envs=self.cfg.num_envs, reset_stat=self.cfg.reset_stat, rtg_min_steps=self.cfg.rtg_min_steps), self.tcfg, self.device, gamma=self.cfg.gamma)
 
   def _make_buffer(self):
     return ReplayBuffer(self.cfg.num_envs, self.cfg.buffer_steps, XI_DIM, self.device)

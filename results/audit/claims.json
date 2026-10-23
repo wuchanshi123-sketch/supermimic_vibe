@@ -77,7 +77,7 @@
 "claim": "On 129,514 BONES-SEED motions, 1 GPU x 3 h beats SONIC (return 0.90; 25 vs 179 failed); 2 GPUs x 9.8 h: 0 failed",
 "paper": "25 / 0 failed vs SONIC 179",
 "ours": "SONIC checkpoint in our simulator: 0.893, 642 failed (with SONIC's hip motor model too: 0.893, 629); SuperMimic 1 A6000: best 0.914 (695 failed) at 4.7 h; within 8.1 h (~3 H100-h): 0.914 (695 failed); passes SONIC's return at 3.04 h; 2 A6000s: best 0.909 (791 failed) at 2.4 h",
-"status": "In progress"
+"status": "Not reproduced"
 },
 {
 "id": "C11",
@@ -93,7 +93,7 @@
 "claim": ">1000x fewer GPU-hours than SONIC (21k GPU-h)",
 "paper": "3 GPU-h vs ~21,000",
 "ours": "3.04 A6000-h to pass SONIC's return in our simulator vs ~21,000 L40-h: 6,919x",
-"status": "In progress"
+"status": "Partly reproduced"
 },
 {
 "id": "C13",

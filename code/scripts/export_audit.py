@@ -37,7 +37,8 @@ RUNS = {
   "sweep_bones_40h": ("Dataset sweep, 40 h of BONES-SEED", "Fig. 2b,c", "31950524"),
   "bones_fix_detfrac25": ("Fix test: 25% of envs collect without action noise (not in paper)", "Fig. 2a (diagnosis)", "31953913"),
   "bones_fix_fp32": ("Fix test: fp32 networks instead of bf16 (paper: TF32)", "Fig. 2a (diagnosis)", "31953914"),
-  "bones_fix_traversed": ("Fix test: reset sampler updates every traversed bin (paper's wording)", "Fig. 2a (diagnosis)", "31957454"),
+  "bones_fix_traversed": ("Fix test: reset sampler updates traversed bins with >= 0.5 s left", "Fig. 2a (diagnosis)", "31957454"),
+  "bones_fix_traversed_all": ("Fix test: reset sampler updates every traversed bin (paper's wording)", "Fig. 2a (diagnosis)", "31960983"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.
