@@ -526,3 +526,19 @@ on both counts, vs ~21,000 L40-h) show the faithful and the fixed runs separatel
 Other runs (8,192 clips): traversed_all 0.904-0.914 from 3.4 to 6.3 h (coverage 0.998, no clear decline
 yet); detfrac + traversed 0.904 (42) @ 3.05 h; 2-GPU det-frac 0.884 (78) @ 1.51 h. The latter two share
 node301 and run at 0.59 / 0.48 s per iteration instead of ~0.29 / 0.33.
+
+## Check-in 2026-10-23 22:50Z
+
+- traversed_all drifted like the first traversed run: 8,192-clip benchmark 0.914 @ 52k -> 0.851 @ 96k
+  iterations; stopped at 8.3 h (job 31960983). Without det-frac the deterministic drift appears with
+  either sampler variant.
+- detfrac + traversed vs detfrac alone at matched iterations: 20k 0.883 vs 0.879, 32k 0.904 vs 0.895, 48k
+  0.907 vs 0.908 — no gain from the traversed sampler so far (combo still running, coverage 0.998).
+- 2-GPU det-frac @ 28k iterations (3.45 h wall, 6.9 GPU-h): 0.908 (41 of 8,192 failed); the faithful
+  2-GPU run had 0.909 at 28k before declining; the paper's 2-GPU curve is at ~0.95 at 6.9 GPU-h.
+- Where det-frac @ 112k fails (416 of 128,904 on the full benchmark): all handstands (134/134), safety rolls
+  (44/44), flips (44/44), monkey (18/18), most tiger (16/18), 18/108 cartwheels, 10/24 inchworms — about
+  300 acrobatic clips; the paper keeps flips and rolls and reports 25 failures in total, so its policy
+  learns them. 5,033 clips have return < 0.8, 28,340 < 0.9.
+- det-frac resumed from its 10 h checkpoint to a 24 h budget (job 31967618), to see whether it keeps
+  improving like the paper's curve (0.96 at ~9 H100-h, ~25 A6000-h).

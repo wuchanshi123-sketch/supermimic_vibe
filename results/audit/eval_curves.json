@@ -3303,6 +3303,51 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 80000,
+"hours": 6.6316,
+"norm_return": 0.8897,
+"failed": 34,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 84000,
+"hours": 6.9579,
+"norm_return": 0.8886,
+"failed": 37,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 88000,
+"hours": 7.2837,
+"norm_return": 0.8758,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 92000,
+"hours": 7.6096,
+"norm_return": 0.8741,
+"failed": 34,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 96000,
+"hours": 7.936,
+"norm_return": 0.851,
+"failed": 44,
+"clips": 8192
+},
+{
 "run": "bones_fix_detfrac_traversed",
 "label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
 "iteration": 4000,
@@ -3384,6 +3429,33 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 40000,
+"hours": 3.7015,
+"norm_return": 0.903,
+"failed": 38,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 44000,
+"hours": 4.3659,
+"norm_return": 0.9106,
+"failed": 36,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 48000,
+"hours": 4.9482,
+"norm_return": 0.9065,
+"failed": 38,
+"clips": 8192
+},
+{
 "run": "smimic_bones_2gpu_detfrac",
 "label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
 "iteration": 4000,
@@ -3417,6 +3489,33 @@
 "hours": 1.5055,
 "norm_return": 0.8838,
 "failed": 78,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 20000,
+"hours": 2.044,
+"norm_return": 0.8965,
+"failed": 48,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 24000,
+"hours": 2.582,
+"norm_return": 0.8948,
+"failed": 44,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 28000,
+"hours": 3.116,
+"norm_return": 0.908,
+"failed": 41,
 "clips": 8192
 },
 {
