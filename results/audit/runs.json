@@ -159,8 +159,8 @@
 "figure": "Fig. 2a",
 "slurm_job": "31950477",
 "status": "running",
-"iterations": 6600,
-"train_hours": 0.643,
+"iterations": 37900,
+"train_hours": 3.189,
 "log": "runs/smimic_bones_1gpu/log.jsonl",
 "evals": "runs/smimic_bones_1gpu/eval.jsonl"
 },
@@ -170,8 +170,8 @@
 "figure": "Fig. 2a",
 "slurm_job": "31950519",
 "status": "running",
-"iterations": 4300,
-"train_hours": 0.466,
+"iterations": 34800,
+"train_hours": 3.009,
 "log": "runs/smimic_bones_2gpu/log.jsonl",
 "evals": "runs/smimic_bones_2gpu/eval.jsonl"
 },
@@ -181,8 +181,8 @@
 "figure": "Fig. 2b,c",
 "slurm_job": "31950522",
 "status": "running",
-"iterations": 4100,
-"train_hours": 0.44,
+"iterations": 35400,
+"train_hours": 2.989,
 "log": "runs/sweep_bones_1h/log.jsonl",
 "evals": "runs/sweep_bones_1h/eval.jsonl"
 },
@@ -192,8 +192,8 @@
 "figure": "Fig. 2b,c",
 "slurm_job": "31950523",
 "status": "running",
-"iterations": 4200,
-"train_hours": 0.432,
+"iterations": 37000,
+"train_hours": 2.978,
 "log": "runs/sweep_bones_7h/log.jsonl",
 "evals": "runs/sweep_bones_7h/eval.jsonl"
 },
@@ -203,8 +203,8 @@
 "figure": "Fig. 2b,c",
 "slurm_job": "31950524",
 "status": "running",
-"iterations": 3900,
-"train_hours": 0.431,
+"iterations": 34300,
+"train_hours": 2.976,
 "log": "runs/sweep_bones_40h/log.jsonl",
 "evals": "runs/sweep_bones_40h/eval.jsonl"
 }

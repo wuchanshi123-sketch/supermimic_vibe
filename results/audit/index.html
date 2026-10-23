@@ -95,6 +95,7 @@
   <nav class="sm-tabs" role="tablist" aria-label="Audit sections">
     <button class="sm-tab" role="tab" id="tab-claims" data-page="claims" aria-selected="true">Claims</button>
     <button class="sm-tab" role="tab" id="tab-lafan" data-page="lafan" aria-selected="false">LAFAN1 comparison</button>
+    <button class="sm-tab" role="tab" id="tab-bones" data-page="bones" aria-selected="false">BONES-SEED vs SONIC</button>
     <button class="sm-tab" role="tab" id="tab-ablations" data-page="ablations" aria-selected="false">Horizon and critic</button>
     <button class="sm-tab" role="tab" id="tab-worldmodel" data-page="worldmodel" aria-selected="false">World model</button>
     <button class="sm-tab" role="tab" id="tab-implementation" data-page="implementation" aria-selected="false">Implementation</button>
@@ -149,6 +150,30 @@
             <th data-field="ppo_failed"><button data-sort="ppo_failed">Failed</button></th>
             <th class="sm-num" data-field="supermimic_checkpoint_hours"><button data-sort="supermimic_checkpoint_hours">SuperMimic ckpt (h)</button></th>
             <th class="sm-num" data-field="ppo_checkpoint_hours"><button data-sort="ppo_checkpoint_hours">PPO ckpt (h)</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sm-page" id="bones" role="tabpanel" aria-labelledby="tab-bones" hidden>
+    <div class="sm-card" id="card-bones-curve">
+      <h3>Benchmark return on the filtered BONES-SEED set (Fig. 2a)</h3>
+      <p class="sm-note">Normalized return on every one of the 128,904 filtered BONES-SEED clips (261 h), each played once from its first frame with no randomization or noise. Solid lines are our runs on RTX A6000s, dashed lines the paper's on H100s (its benchmark has 129,514 clips). The horizontal axis is GPU-hours on a log scale, as in the paper, so the 2-GPU runs are drawn at twice their wall-clock time. An A6000 runs SuperMimic about 2.7 times slower per iteration than an H100. Flat lines mark SONIC's released checkpoint.</p>
+      <ul class="sm-legend" id="legend-bones" data-source="eval_curves paper_curves sonic_bones"></ul>
+      <div class="sm-chart sm-tall dash-skeleton" id="chart-bones" data-source="eval_curves paper_curves sonic_bones"></div>
+    </div>
+    <div class="sm-card" id="card-sonic">
+      <h3>SONIC's released checkpoint on the same benchmark</h3>
+      <p class="sm-note">Scored with SuperMimic's reward, termination and episode protocol, using SONIC's own PD gains, action scale, default pose and observation layout (code/supermimic/sonic.py). The second row also gives SONIC's hip-pitch motor its effort limit and armature.</p>
+      <div class="sm-scroll">
+        <table class="sm-table" id="table-sonic" data-source="sonic_bones" data-row-key="variant">
+          <thead><tr>
+            <th data-field="variant">Setting</th>
+            <th class="sm-num" data-field="norm_return">Normalized return</th>
+            <th class="sm-num" data-field="failed">Failed clips</th>
+            <th class="sm-num" data-field="clips">Clips</th>
           </tr></thead>
           <tbody></tbody>
         </table>
@@ -621,6 +646,43 @@ $SMIMIC_PY -m supermimic.evaluate --run runs/smimic_lafan1_1gpu --out eval_reche
     });
   }
 
+  function drawBones() {
+    const el = document.getElementById('chart-bones');
+    if (failLine(el, 'eval_curves') || failLine(el, 'paper_curves') || failLine(el, 'sonic_bones')) return;
+    if (!ok('eval_curves') || !ok('paper_curves') || !ok('sonic_bones')) return;
+    const ev = rows('eval_curves');
+    const pc = rows('paper_curves');
+    const sb = rows('sonic_bones');
+    const pick = (run, gpus) => ev.filter((r) => r.run === run && r.hours > 0).map((r) => ({ x: r.hours * gpus, y: r.norm_return, failed: r.failed, clips: r.clips }));
+    const ppick = (name) => pc.filter((r) => r.series === name).map((r) => ({ x: r.hours, y: r.norm_return }));
+    const lo = 0.05, hi = 60;
+    const flat = (row) => [{ x: lo, y: row.norm_return, failed: row.failed, clips: row.clips }, { x: hi, y: row.norm_return, failed: row.failed, clips: row.clips }];
+    const series = [
+      { name: 'SuperMimic, ours (1 A6000)', color: C[0], points: pick('smimic_bones_1gpu', 1), marks: true },
+      { name: 'SuperMimic, ours (2 A6000s)', color: C[2], points: pick('smimic_bones_2gpu', 2), marks: true },
+      { name: 'SuperMimic, paper (1 H100)', color: C[0], dash: true, opacity: 0.6, points: ppick('Paper SuperMimic BONES-SEED, 1 H100') },
+      { name: 'SuperMimic, paper (2 H100s)', color: C[2], dash: true, opacity: 0.6, points: ppick('Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)') },
+    ];
+    const ours = sb.find((r) => r.variant.startsWith('Our simulator, SONIC'));
+    const paper = sb.find((r) => r.variant.startsWith('Paper'));
+    if (ours) series.push({ name: 'SONIC checkpoint, our simulator', color: C[1], width: 1.5, points: flat(ours) });
+    if (paper) series.push({ name: 'SONIC checkpoint, paper', color: C[1], dash: true, opacity: 0.6, width: 1.5, points: flat(paper) });
+    legend('legend-bones', series);
+    lineChart(el, {
+      series: series.filter((x) => x.points.length), xLog: true, xDomain: [lo, hi], xTickVals: [0.1, 1, 10], yDomain: [0.6, 1], height: 340,
+      fmtX: (v) => String(v), fmtY: d3.format('.2f'),
+      xLabel: 'GPU-hours', yLabel: 'Normalized return',
+      aria: 'BONES-SEED benchmark return against GPU-hours, ours, the paper, and the SONIC checkpoint',
+      tipHead: (d) => `${fmt2(d.x)} GPU-h`, tipValue: (d) => `${fmt3(d.y)}${d.failed !== undefined ? ` (${fmtInt(d.failed)} of ${fmtInt(d.clips)} failed)` : ''}`,
+    });
+    fillTable('table-sonic', sb, [
+      { key: 'variant', cls: 'sm-wrap' },
+      { key: 'norm_return', cls: 'sm-num', fmt: fmt3 },
+      { key: 'failed', cls: 'sm-num', fmt: fmtInt },
+      { key: 'clips', cls: 'sm-num', fmt: fmtInt },
+    ]);
+  }
+
   function drawClips() {
     if (!ok('per_clip')) return;
     const q = clipSearch.value.trim().toLowerCase();
@@ -791,6 +853,7 @@ $SMIMIC_PY -m supermimic.evaluate --run runs/smimic_lafan1_1gpu --out eval_reche
     drawSummary();
     if (current === 'claims') drawClaims();
     if (current === 'lafan') { drawLafan(); drawClips(); }
+    if (current === 'bones') drawBones();
     if (current === 'ablations') drawAblations();
     if (current === 'worldmodel') { drawWorldModel(); drawFig4b(); }
     if (current === 'implementation') drawImplementation();

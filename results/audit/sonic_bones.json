@@ -1,0 +1,20 @@
+[
+{
+"variant": "Our simulator, SONIC's own PD gains and action scale",
+"norm_return": 0.8928,
+"failed": 642,
+"clips": 128904
+},
+{
+"variant": "Our simulator, also SONIC's hip-pitch motor model",
+"norm_return": 0.8926,
+"failed": 629,
+"clips": 128904
+},
+{
+"variant": "Paper (its 129,514-motion benchmark)",
+"norm_return": 0.9012,
+"failed": 179,
+"clips": 129514
+}
+]

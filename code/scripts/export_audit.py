@@ -44,6 +44,12 @@ PAPER_CURVES = {
   "Paper PPO-Sim, 8 GPUs": [(0.00138889, 0.001772), (0.19125, 0.3744), (0.377223, 0.3994), (0.563195, 0.388), (0.748611, 0.4448), (0.934584, 0.4885), (1.12069, 0.5124), (1.30653, 0.5082), (1.49194, 0.5438), (1.67639, 0.554), (1.86055, 0.5414), (2.04486, 0.5543), (2.22903, 0.5772), (2.41305, 0.5883), (2.59667, 0.5909), (2.78097, 0.603), (2.96445, 0.6032), (3.14792, 0.605), (3.33125, 0.6189), (3.51472, 0.6225), (3.69819, 0.6107), (3.88138, 0.6108), (4.06458, 0.621), (4.24833, 0.6094), (4.43153, 0.6318), (4.61486, 0.6354), (5.53014, 0.6449), (6.445, 0.6744), (7.36055, 0.6688), (9.19111, 0.6944), (11.0203, 0.7018), (14.4397, 0.7188), (18.0328, 0.7218)],
 }
 
+# Paper Fig. 2a (BONES-SEED benchmark of 129,514 motions): normalized return vs GPU-hours on
+# H100s (sections/results.tex); SONIC's released checkpoint scores 0.9012 there.
+PAPER_CURVES["Paper SuperMimic BONES-SEED, 1 H100"] = [(0.061, 0.7034), (0.091, 0.7573), (0.120, 0.8042), (0.149, 0.8269), (0.208, 0.8495), (0.237, 0.8572), (0.326, 0.8665), (0.384, 0.8821), (0.502, 0.8970), (0.619, 0.9074), (0.795, 0.9152), (1.001, 0.9246), (1.264, 0.9308), (1.586, 0.9319), (1.995, 0.9344), (2.521, 0.9426), (3.164, 0.9363), (3.982, 0.9502), (5.006, 0.9499), (6.322, 0.9598), (7.932, 0.9616), (9.368, 0.9600)]
+PAPER_CURVES["Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)"] = [(0.066, 0.6344), (0.128, 0.7401), (0.189, 0.8191), (0.250, 0.8443), (0.372, 0.8616), (0.495, 0.8821), (0.617, 0.8933), (0.740, 0.9063), (0.985, 0.9123), (1.230, 0.9223), (1.598, 0.9287), (1.965, 0.9349), (2.454, 0.9359), (3.188, 0.9436), (3.921, 0.9457), (5.022, 0.9447), (6.367, 0.9492), (7.956, 0.9564), (10.036, 0.9602), (12.606, 0.9612), (15.788, 0.9636), (19.584, 0.9641)]
+PAPER_SONIC = {"norm_return": 0.9012, "failed": 179, "clips": 129514}
+
 # Paper Fig. 3b (final training return) and 3c (hours to training return 0.82); None = not reached.
 PAPER_ABLATION = {
   (8, True): (0.392, None), (16, True): (0.843, 1.19), (32, True): (0.866, 0.88), (64, True): (0.863, 1.70), (128, True): (0.823, 4.62),
@@ -459,6 +465,17 @@ def main():
       "log": f"runs/{run}/log.jsonl", "evals": f"runs/{run}/eval.jsonl",
     })
   data["runs"] = reg
+
+  # SONIC's released checkpoint on the BONES-SEED benchmark, ours and the paper's.
+  sb = []
+  for fn, label in (("sonic_bones_gains.json", "Our simulator, SONIC's own PD gains and action scale"),
+                    ("sonic_bones_full.json", "Our simulator, also SONIC's hip-pitch motor model")):
+    path = os.path.join(ROOT, "results", fn)
+    if os.path.exists(path):
+      r = json.load(open(path))
+      sb.append({"variant": label, "norm_return": round(r["norm_return"], 4), "failed": r["failed"], "clips": r["num_clips"]})
+  sb.append({"variant": "Paper (its 129,514-motion benchmark)", **PAPER_SONIC})
+  data["sonic_bones"] = sb
 
   data["claims"] = claims(data)
   data["fidelity"] = FIDELITY

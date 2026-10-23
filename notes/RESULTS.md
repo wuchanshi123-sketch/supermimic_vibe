@@ -233,3 +233,45 @@ list "plus a few terms it misses"; SONIC's list plus the terms the paper names r
 (paper 12,553), our extra terms (wall_, car_, ledge, ...) remove 844 more, a few of them false
 positives (e.g. "ledge" matches "sledgehammering"). Net: 0.5% fewer clips and 1.2% fewer hours than
 the paper's training set; not tuned further.
+
+## SONIC's released checkpoint on the BONES-SEED benchmark (Fig. 2a baseline) — 2026-10-22 23:40Z
+
+code/supermimic/sonic.py scores the GEAR-SONIC release (model_encoder.onnx / model_decoder.onnx,
+g1 mode) in our simulator with the benchmark protocol and SuperMimic's reward/termination. The
+ONNX graphs (batch size 1) are re-implemented as a batched PyTorch module
+(code/supermimic/sonic_net.py; code/scripts/convert_sonic.py checks it against onnx.reference:
+max pre-quantizer difference 1.5e-7, no token code differs, decoder 2.4e-6). Inputs, joint orders,
+default pose, action scale and PD gains follow the deployment reference; SONIC's joint targets are
+converted to our action units so the action-rate term is measured the same way for both policies.
+
+| | normalized return | failed (of 128,904) |
+| --- | --- | --- |
+| SONIC, own PD gains and action scale (paper's setting) | 0.893 (frame-weighted 0.898) | 642 |
+| SONIC, also its hip-pitch motor model (7520_22 effort and armature) | 0.893 | 629 |
+| paper (SONIC on its 129,514 motions) | 0.90 | 179 |
+| SONIC on LAFAN1 (40 clips), for reference | 0.605 | 13 |
+
+The return matches the paper's 0.90; SONIC fails more clips in our simulator (642 vs 179). Only the
+hip-pitch gains differ from mjlab's G1 actuators (SONIC assumes the 7520_22 motor there). One
+full-benchmark evaluation takes ~17 min on an A6000.
+
+## BONES-SEED runs, check-in 2026-10-23 02:00Z
+
+Benchmark on all 128,904 filtered clips (SONIC in our simulator: 0.893, 642 failed):
+
+| run | 0.43 h | 0.76 h | 1.08 h | 1.41 h | 2.06 h | 2.44 h | 2.71 h |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 A6000 | 0.669 (4,781) | 0.813 (2,482) | 0.856 (1,900) | 0.868 (1,932) | 0.891 (922) | — | 0.893 (893) |
+| 2 A6000s (wall-clock) | 0.675 (5,025) | 0.857 (1,634) | 0.881 (1,542) | 0.892 (966) | 0.901 (680) | 0.909 (791) | — |
+
+The 2-GPU run passed SONIC's return in our simulator at 2.11 h wall-clock (0.901); neither run has
+fewer failed clips than SONIC yet. Against the paper (Fig. 2a, GPU-hours on H100s): its 1-GPU curve
+passes 0.90 at ~0.55 H100-h and is 0.925 at 1 H100-h; with the A6000 ~2.7x slower per iteration, 1 H100-h
+is ~2.7 A6000-h, where we are at 0.893. So our BONES-SEED curve is behind the paper's by roughly 2x in
+compute beyond the hardware factor; still training (16 h / 26 h budgets).
+
+Dataset-length sweep: training return is not comparable across library sizes under return-based reset
+sampling (on 1-40 h libraries every 1 s bin is visited early and the sampler then concentrates 40% of
+resets on the hardest bins; on 261 h most bins are never visited and sampling stays near uniform; the
+40 h run's training return falls from 0.73 to 0.50 while its episodes shorten). The sweep checkpoints are
+therefore being scored on each subset's own benchmark (job 31951478, slurm/eval_runs.slurm).

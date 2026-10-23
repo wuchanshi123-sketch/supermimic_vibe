@@ -428,5 +428,225 @@
 "series": "Paper PPO-Sim, 8 GPUs",
 "hours": 18.0328,
 "norm_return": 0.7218
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.061,
+"norm_return": 0.7034
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.091,
+"norm_return": 0.7573
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.12,
+"norm_return": 0.8042
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.149,
+"norm_return": 0.8269
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.208,
+"norm_return": 0.8495
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.237,
+"norm_return": 0.8572
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.326,
+"norm_return": 0.8665
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.384,
+"norm_return": 0.8821
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.502,
+"norm_return": 0.897
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.619,
+"norm_return": 0.9074
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 0.795,
+"norm_return": 0.9152
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 1.001,
+"norm_return": 0.9246
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 1.264,
+"norm_return": 0.9308
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 1.586,
+"norm_return": 0.9319
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 1.995,
+"norm_return": 0.9344
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 2.521,
+"norm_return": 0.9426
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 3.164,
+"norm_return": 0.9363
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 3.982,
+"norm_return": 0.9502
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 5.006,
+"norm_return": 0.9499
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 6.322,
+"norm_return": 0.9598
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 7.932,
+"norm_return": 0.9616
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 1 H100",
+"hours": 9.368,
+"norm_return": 0.96
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.066,
+"norm_return": 0.6344
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.128,
+"norm_return": 0.7401
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.189,
+"norm_return": 0.8191
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.25,
+"norm_return": 0.8443
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.372,
+"norm_return": 0.8616
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.495,
+"norm_return": 0.8821
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.617,
+"norm_return": 0.8933
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.74,
+"norm_return": 0.9063
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 0.985,
+"norm_return": 0.9123
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 1.23,
+"norm_return": 0.9223
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 1.598,
+"norm_return": 0.9287
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 1.965,
+"norm_return": 0.9349
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 2.454,
+"norm_return": 0.9359
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 3.188,
+"norm_return": 0.9436
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 3.921,
+"norm_return": 0.9457
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 5.022,
+"norm_return": 0.9447
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 6.367,
+"norm_return": 0.9492
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 7.956,
+"norm_return": 0.9564
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 10.036,
+"norm_return": 0.9602
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 12.606,
+"norm_return": 0.9612
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 15.788,
+"norm_return": 0.9636
+},
+{
+"series": "Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)",
+"hours": 19.584,
+"norm_return": 0.9641
 }
 ]
