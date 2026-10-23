@@ -391,3 +391,29 @@ the largest return attainable over the same remaining horizon; default "start" =
 Test run runs/bones_fix_traversed (job 31957425, 1 A6000, 12 h, 8,192-clip benchmark every 4,000
 iterations). The det-frac and fp32 tests keep running as controls; if the sampler is the cause, they will
 collapse at a similar point.
+
+## Check-in 2026-10-23 10:20Z: sweep final, fix tests so far
+
+Dataset-length sweep, final (each run 8 h on one A6000, scored on its own library; 8,000-iteration
+checkpoints, so hours are coarse):
+
+| library | hours to benchmark 0.82 / 0.85 / 0.88 / 0.90 | best | last |
+| --- | --- | --- | --- |
+| 1 h (518 clips) | 0.76 / 0.76 / 1.41 / 1.41 | 0.962 (0 failed) @ 7.87 h | same |
+| 7 h (3,538) | 0.73 / 1.36 / 1.97 / 2.59 | 0.925 (0) @ 6.44 h | 0.821 (8) @ 7.68 h |
+| 40 h (19,757) | 1.44 / 1.44 / 1.44 / 2.78 | 0.915 (68) @ 4.76 h | 0.856 (48) @ 7.37 h |
+| 261 h (128,904; faithful 1-GPU run) | 1.08 / 1.08 / 2.06 / 3.04 | 0.914 (695) @ 4.65 h | 0.739 (1,356) @ 11.16 h |
+
+Compute to a fixed return grows slowly with the library (to 0.88: 1.4 -> 2.1 A6000-h from 1 h to 261 h;
+paper: 0.54 -> 1.89 H100-h to its target), as the paper reports. All but the 1 h library show the same
+late decline as the full run, the 1 h one (whose hardest bins are still learnable) keeps improving —
+consistent with the reset-sampler explanation above.
+
+Faithful 1-GPU run at 11.5 h: benchmark oscillates 0.61-0.82 (594-20,682 failed); training return 0.40.
+
+Fix tests (8,192-clip benchmark subset; same scale as the full benchmark within ~0.005):
+- detfrac25 @ 3.24 h: 0.904 (51 failed); bins visited 0.75.
+- fp32 @ 3.27 h: 0.891 (62 failed); bins visited 0.60 (fp32 is 1.4x slower per iteration).
+- traversed @ 1.75 h: 0.883 (69 failed); bins visited 0.83 (traversed updates cover bins much faster).
+None has reached full bin coverage yet, where the faithful run started to decline; the faithful run at
+similar hours: 0.902 (884 of 128,904, i.e. ~56 per 8,192) @ 3.04 h, 0.868 @ 1.41 h.

@@ -37,6 +37,7 @@ RUNS = {
   "sweep_bones_40h": ("Dataset sweep, 40 h of BONES-SEED", "Fig. 2b,c", "31950524"),
   "bones_fix_detfrac25": ("Fix test: 25% of envs collect without action noise (not in paper)", "Fig. 2a (diagnosis)", "31953913"),
   "bones_fix_fp32": ("Fix test: fp32 networks instead of bf16 (paper: TF32)", "Fig. 2a (diagnosis)", "31953914"),
+  "bones_fix_traversed": ("Fix test: reset sampler updates every traversed bin (paper's wording)", "Fig. 2a (diagnosis)", "31957454"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.
@@ -261,19 +262,15 @@ def claims(data):
 
   def sweep_text():
     out = []
-    for h in ("1h", "7h", "40h"):
-      L = jsonl(os.path.join(ROOT, "runs", f"sweep_bones_{h}", "log.jsonl"))
-      if not L:
+    for run, lib in (("sweep_bones_1h", "1 h"), ("sweep_bones_7h", "7 h"), ("sweep_bones_40h", "40 h"), ("smimic_bones_1gpu", "261 h")):
+      rows = sorted(jsonl(os.path.join(ROOT, "runs", run, "eval.jsonl")), key=lambda d: d["hours"])
+      if not rows:
         continue
-      cross = next((d["hours"] for d in L if d.get("ep_norm_return", 0) >= 0.82), None)
-      out.append(f"{h}: train return 0.82 at {cross:.2f} h" if cross else f"{h}: {L[-1].get('ep_norm_return', 0):.3f} after {L[-1]['hours']:.1f} h")
-      out[-1] += f", 8-step WM error {L[-1].get('wm_errk', 0):.3f}"
-    L = jsonl(os.path.join(ROOT, "runs", "smimic_bones_1gpu", "log.jsonl"))
-    if L:
-      cross = next((d["hours"] for d in L if d.get("ep_norm_return", 0) >= 0.82), None)
-      out.append((f"261 h: train return 0.82 at {cross:.2f} h" if cross else f"261 h: {L[-1].get('ep_norm_return', 0):.3f} after {L[-1]['hours']:.1f} h")
-                 + f", 8-step WM error {L[-1].get('wm_errk', 0):.3f}")
-    return "; ".join(out) + " (our WM error is normalized by the one-step delta std, not the paper's nominal error)" if out else "runs queued"
+      cross = next((d["hours"] for d in rows if d["norm_return"] >= 0.88), None)
+      best = max(rows, key=lambda d: d["norm_return"])
+      out.append(f"{lib}: benchmark 0.88 at {cross:.2f} h, best {best['norm_return']:.3f}" if cross else f"{lib}: best {best['norm_return']:.3f}")
+    return ("; ".join(out) + " (A6000-hours, each library scored on its own clips; paper 0.54 -> 1.89 H100-h; "
+            "our WM error is not on the paper's nominal scale)") if out else "runs queued"
 
   ratios = [sp[n]["ours_world_model"] / sp[n]["ours_mjwarp"] for n in (2048, 4096, 8192, 16384) if sp[n]["ours_mjwarp"]]
   rows = [

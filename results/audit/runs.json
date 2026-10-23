@@ -159,8 +159,8 @@
 "figure": "Fig. 2a",
 "slurm_job": "31950477",
 "status": "running",
-"iterations": 86900,
-"train_hours": 7.171,
+"iterations": 140800,
+"train_hours": 11.543,
 "log": "runs/smimic_bones_1gpu/log.jsonl",
 "evals": "runs/smimic_bones_1gpu/eval.jsonl"
 },
@@ -180,9 +180,9 @@
 "label": "Dataset sweep, 1 h of BONES-SEED",
 "figure": "Fig. 2b,c",
 "slurm_job": "31950522",
-"status": "running",
-"iterations": 84900,
-"train_hours": 6.98,
+"status": "finished",
+"iterations": 97500,
+"train_hours": 7.994,
 "log": "runs/sweep_bones_1h/log.jsonl",
 "evals": "runs/sweep_bones_1h/eval.jsonl"
 },
@@ -191,9 +191,9 @@
 "label": "Dataset sweep, 7 h of BONES-SEED",
 "figure": "Fig. 2b,c",
 "slurm_job": "31950523",
-"status": "running",
-"iterations": 86800,
-"train_hours": 6.971,
+"status": "finished",
+"iterations": 100000,
+"train_hours": 7.995,
 "log": "runs/sweep_bones_7h/log.jsonl",
 "evals": "runs/sweep_bones_7h/eval.jsonl"
 },
@@ -202,9 +202,9 @@
 "label": "Dataset sweep, 40 h of BONES-SEED",
 "figure": "Fig. 2b,c",
 "slurm_job": "31950524",
-"status": "running",
-"iterations": 83000,
-"train_hours": 6.965,
+"status": "finished",
+"iterations": 95600,
+"train_hours": 7.995,
 "log": "runs/sweep_bones_40h/log.jsonl",
 "evals": "runs/sweep_bones_40h/eval.jsonl"
 },
@@ -214,8 +214,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953913",
 "status": "running",
-"iterations": 0,
-"train_hours": 0,
+"iterations": 43500,
+"train_hours": 3.509,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -225,9 +225,20 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953914",
 "status": "running",
-"iterations": 0,
-"train_hours": 0,
+"iterations": 32000,
+"train_hours": 3.715,
 "log": "runs/bones_fix_fp32/log.jsonl",
 "evals": "runs/bones_fix_fp32/eval.jsonl"
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31957454",
+"status": "running",
+"iterations": 20200,
+"train_hours": 1.763,
+"log": "runs/bones_fix_traversed/log.jsonl",
+"evals": "runs/bones_fix_traversed/eval.jsonl"
 }
 ]

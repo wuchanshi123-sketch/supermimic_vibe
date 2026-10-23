@@ -382,11 +382,11 @@ class TrackingSimEnv:
     done_ids = done.nonzero(as_tuple=False).squeeze(-1)
     if len(done_ids):
       # A terminated episode scores 0 for the remaining frames it could have run.
+      b = self.ep_bin[done_ids]
       if self.cfg.reset_stat == "traversed":
         self._update_bins_traversed(done_ids)
       else:
         ratio = self.ep_disc_ret[done_ids] / self._max_disc_return(done_ids)
-        b = self.ep_bin[done_ids]
         a = self.cfg.bin_ema
         G_old = self.bin_G[b]
         new = torch.where(self.bin_visits[b] > 0, (1 - a) * G_old + a * ratio, ratio)
