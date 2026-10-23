@@ -1683,6 +1683,69 @@
 "clips": 128904
 },
 {
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 36000,
+"hours": 3.0353,
+"norm_return": 0.9017,
+"failed": 884,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 40000,
+"hours": 3.359,
+"norm_return": 0.9047,
+"failed": 654,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 44000,
+"hours": 3.6825,
+"norm_return": 0.9067,
+"failed": 804,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 48000,
+"hours": 4.0059,
+"norm_return": 0.9072,
+"failed": 676,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 52000,
+"hours": 4.3296,
+"norm_return": 0.9065,
+"failed": 637,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 56000,
+"hours": 4.6533,
+"norm_return": 0.9136,
+"failed": 695,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 60000,
+"hours": 4.9775,
+"norm_return": 0.9079,
+"failed": 629,
+"clips": 128904
+},
+{
 "run": "smimic_bones_2gpu",
 "label": "SuperMimic, BONES-SEED, 2 GPUs",
 "iteration": 4000,
@@ -1753,5 +1816,176 @@
 "norm_return": 0.8955,
 "failed": 724,
 "clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 36000,
+"hours": 3.1096,
+"norm_return": 0.9016,
+"failed": 666,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 40000,
+"hours": 3.4414,
+"norm_return": 0.8975,
+"failed": 646,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 44000,
+"hours": 3.7846,
+"norm_return": 0.8779,
+"failed": 649,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 48000,
+"hours": 4.1295,
+"norm_return": 0.8687,
+"failed": 1014,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 52000,
+"hours": 4.4845,
+"norm_return": 0.8346,
+"failed": 1261,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 56000,
+"hours": 4.8404,
+"norm_return": 0.7493,
+"failed": 7564,
+"clips": 128904
+},
+{
+"run": "sweep_bones_1h",
+"label": "Dataset sweep, 1 h of BONES-SEED",
+"iteration": 8000,
+"hours": 0.7591,
+"norm_return": 0.8576,
+"failed": 0,
+"clips": 518
+},
+{
+"run": "sweep_bones_1h",
+"label": "Dataset sweep, 1 h of BONES-SEED",
+"iteration": 16000,
+"hours": 1.4148,
+"norm_return": 0.9151,
+"failed": 0,
+"clips": 518
+},
+{
+"run": "sweep_bones_1h",
+"label": "Dataset sweep, 1 h of BONES-SEED",
+"iteration": 24000,
+"hours": 2.0664,
+"norm_return": 0.9321,
+"failed": 0,
+"clips": 518
+},
+{
+"run": "sweep_bones_1h",
+"label": "Dataset sweep, 1 h of BONES-SEED",
+"iteration": 32000,
+"hours": 2.7137,
+"norm_return": 0.9432,
+"failed": 0,
+"clips": 518
+},
+{
+"run": "sweep_bones_7h",
+"label": "Dataset sweep, 7 h of BONES-SEED",
+"iteration": 8000,
+"hours": 0.7306,
+"norm_return": 0.8253,
+"failed": 36,
+"clips": 3538
+},
+{
+"run": "sweep_bones_7h",
+"label": "Dataset sweep, 7 h of BONES-SEED",
+"iteration": 16000,
+"hours": 1.3552,
+"norm_return": 0.8776,
+"failed": 29,
+"clips": 3538
+},
+{
+"run": "sweep_bones_7h",
+"label": "Dataset sweep, 7 h of BONES-SEED",
+"iteration": 24000,
+"hours": 1.9738,
+"norm_return": 0.89,
+"failed": 18,
+"clips": 3538
+},
+{
+"run": "sweep_bones_7h",
+"label": "Dataset sweep, 7 h of BONES-SEED",
+"iteration": 32000,
+"hours": 2.591,
+"norm_return": 0.9008,
+"failed": 9,
+"clips": 3538
+},
+{
+"run": "sweep_bones_40h",
+"label": "Dataset sweep, 40 h of BONES-SEED",
+"iteration": 8000,
+"hours": 0.7728,
+"norm_return": 0.8133,
+"failed": 391,
+"clips": 19757
+},
+{
+"run": "sweep_bones_40h",
+"label": "Dataset sweep, 40 h of BONES-SEED",
+"iteration": 16000,
+"hours": 1.441,
+"norm_return": 0.8851,
+"failed": 109,
+"clips": 19757
+},
+{
+"run": "sweep_bones_40h",
+"label": "Dataset sweep, 40 h of BONES-SEED",
+"iteration": 24000,
+"hours": 2.1097,
+"norm_return": 0.8925,
+"failed": 132,
+"clips": 19757
+},
+{
+"run": "sweep_bones_40h",
+"label": "Dataset sweep, 40 h of BONES-SEED",
+"iteration": 32000,
+"hours": 2.7792,
+"norm_return": 0.9016,
+"failed": 110,
+"clips": 19757
+},
+{
+"run": "sweep_bones_40h",
+"label": "Dataset sweep, 40 h of BONES-SEED",
+"iteration": 40000,
+"hours": 3.4494,
+"norm_return": 0.9028,
+"failed": 84,
+"clips": 19757
 }
 ]

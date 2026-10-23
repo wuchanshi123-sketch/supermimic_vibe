@@ -76,7 +76,7 @@
 "where": "Fig. 2a, Table A.4",
 "claim": "On 129,514 BONES-SEED motions, 1 GPU x 3 h beats SONIC (return 0.90; 25 vs 179 failed); 2 GPUs x 9.8 h: 0 failed",
 "paper": "25 / 0 failed vs SONIC 179",
-"ours": "SONIC checkpoint in our simulator: 0.893, 642 failed (with SONIC's hip motor model too: 0.893, 629); SuperMimic 1 A6000: best 0.893 (893 failed) at 2.7 h; within 8.1 h (~3 H100-h): 0.893 (893 failed); has not passed SONIC's return yet; 2 A6000s: best 0.909 (791 failed) at 2.4 h",
+"ours": "SONIC checkpoint in our simulator: 0.893, 642 failed (with SONIC's hip motor model too: 0.893, 629); SuperMimic 1 A6000: best 0.914 (695 failed) at 4.7 h; within 8.1 h (~3 H100-h): 0.914 (695 failed); passes SONIC's return at 3.04 h; 2 A6000s: best 0.909 (791 failed) at 2.4 h",
 "status": "In progress"
 },
 {
@@ -84,7 +84,7 @@
 "where": "Fig. 2b,c",
 "claim": "From 1 to 264 h of motion, 8-step WM error stays 0.007-0.011 and GPU-hours to target grow slowly",
 "paper": "0.54 -> 1.89 GPU-h",
-"ours": "1h: 0.687 after 3.0 h, 8-step WM error 0.098; 7h: 0.524 after 3.0 h, 8-step WM error 0.300; 40h: 0.508 after 3.0 h, 8-step WM error 0.295; 261 h: train return 0.82 at 1.55 h, 8-step WM error 0.138 (our WM error is normalized by the one-step delta std, not the paper's nominal error)",
+"ours": "1h: train return 0.82 at 3.38 h, 8-step WM error 0.076; 7h: 0.590 after 5.1 h, 8-step WM error 0.132; 40h: 0.491 after 5.1 h, 8-step WM error 0.235; 261 h: train return 0.82 at 1.55 h, 8-step WM error 0.131 (our WM error is normalized by the one-step delta std, not the paper's nominal error)",
 "status": "In progress"
 },
 {
@@ -92,7 +92,7 @@
 "where": "Sec. 5.1",
 "claim": ">1000x fewer GPU-hours than SONIC (21k GPU-h)",
 "paper": "3 GPU-h vs ~21,000",
-"ours": "SuperMimic has not passed SONIC's 0.893 yet",
+"ours": "3.04 A6000-h to pass SONIC's return in our simulator vs ~21,000 L40-h: 6,919x",
 "status": "In progress"
 },
 {

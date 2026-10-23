@@ -275,3 +275,35 @@ sampling (on 1-40 h libraries every 1 s bin is visited early and the sampler the
 resets on the hardest bins; on 261 h most bins are never visited and sampling stays near uniform; the
 40 h run's training return falls from 0.73 to 0.50 while its episodes shorten). The sweep checkpoints are
 therefore being scored on each subset's own benchmark (job 31951478, slurm/eval_runs.slurm).
+
+## BONES-SEED, check-in 2026-10-23 04:05Z
+
+1 A6000 (job 31950477, 5.25 h trained): benchmark 0.902 (884 failed) @ 3.04 h, 0.905 (654) @ 3.36 h,
+0.907 (676) @ 4.01 h, 0.914 (695) @ 4.65 h, 0.908 (629) @ 4.98 h. It passed SONIC's return in our simulator
+(0.893) at 3.04 h and has fewer failed clips than SONIC (642) at 4.98 h, so it beats SONIC on both counts
+in our simulator, but by small margins; the paper's 1-GPU curve is at 0.94 / 25 failed after 3 H100-h
+(~8 A6000-h) and keeps rising to 0.96.
+
+2 A6000s (job 31950519, 5.07 h trained): best 0.909 (791 failed) @ 2.44 h, then the benchmark return
+declines: 0.902 @ 3.11 h, 0.878 @ 3.78 h, 0.869 @ 4.13 h, 0.835 @ 4.48 h, 0.749 (7,564 failed) @ 4.84 h.
+Training return (0.85), training falls (0.5%), world-model error and imagined survival stay healthy;
+the critic loss rises (0.084 -> 0.15) and the imagined return J keeps climbing faster than on one GPU.
+The drop hits all clip lengths (0-3 s clips 0.904 -> 0.826) and the long clips most (20-40 s 0.933 ->
+0.623). Diagnostic job 31952875 (code/scripts/dev/eval_conditions.py) compares the benchmark with
+training-like conditions (observation noise, action noise, domain randomization) for checkpoints before
+and after the drop.
+
+Dataset-length sweep, each subset scored on its own benchmark (checkpoints every 8000 iterations, so
+the hours are coarse):
+
+| library | clips | hours to 0.82 / 0.85 / 0.88 | latest benchmark | 8-step WM error (latest) |
+| --- | --- | --- | --- | --- |
+| 1 h | 518 | 0.76 / 0.76 / 1.41 | 0.943 (0 failed) @ 2.71 h | 0.076 |
+| 7 h | 3,538 | 0.73 / 1.36 / 1.97 | 0.901 (9 failed) @ 2.59 h | 0.156 |
+| 40 h | 19,757 | 1.44 / 1.44 / 1.44 | 0.903 (84 failed) @ 3.45 h | 0.248 |
+| 261 h (1-GPU run) | 128,904 | 1.08 / 1.08 / 2.06 | 0.908 (629 failed) @ 4.98 h | 0.140 |
+
+Paper (H100 GPU-h to its target return): 0.54, 1.35, 1.91, 1.89 for 1, 7, 40, 264 h. Our hours to 0.88
+also grow slowly with the library (1.4 -> 2.1 h for 1 -> 261 h). Our 8-step error is measured on replay
+windows, which on small libraries over-sample the hardest bins (see above), so it is not comparable with
+the paper's online, nominal-normalized 0.007-0.011.
