@@ -307,3 +307,26 @@ Paper (H100 GPU-h to its target return): 0.54, 1.35, 1.91, 1.89 for 1, 7, 40, 26
 also grow slowly with the library (1.4 -> 2.1 h for 1 -> 261 h). Our 8-step error is measured on replay
 windows, which on small libraries over-sample the hardest bins (see above), so it is not comparable with
 the paper's online, nominal-normalized 0.007-0.011.
+
+## The 2-GPU BONES-SEED decline is a deterministic-policy failure — 2026-10-23 05:10Z
+
+code/scripts/dev/eval_conditions.py, 4,096 random BONES-SEED clips, benchmark protocol except as noted
+(normalized return / failed clips):
+
+| condition | 2 GPUs ckpt 28k (before) | 2 GPUs ckpt 56k (after) | 1 GPU ckpt 60k |
+| --- | --- | --- | --- |
+| benchmark (deterministic, no noise, friction 1) | 0.909 / 25 | **0.746 / 274** | 0.908 / 20 |
+| + observation noise | 0.906 / 27 | 0.790 / 144 | 0.907 / 20 |
+| + action noise 0.1 | 0.887 / 23 | **0.901 / 22** | |
+| + domain randomization | 0.905 / 29 | 0.735 / 379 | |
+| all three (training conditions) | 0.879 / 31 | 0.893 / 27 | |
+
+With the exploration noise it is trained with, the later 2-GPU policy is as good as the earlier one
+(and better under action noise); it is the noise-free, deterministic closed loop that breaks down,
+which is why training return and falls stayed healthy. The replay buffer only ever holds states visited
+under N(0, 0.1^2) action noise, so the policy is never trained on the states its deterministic closed loop
+drifts into; this covariate shift grew during 2-GPU training (lr x sqrt(2)). The 1-GPU policy is still
+fine deterministically at 60k. Job 31953843 (code/scripts/dev/rollout_probe.py) checks how the
+deterministic rollouts fail (height vs tilt, timing, action chatter).
+
+Latest benchmark: 1 GPU 0.899 (528 failed) @ 5.95 h; 2 GPUs 0.707 (5,912 failed) @ 5.89 h.
