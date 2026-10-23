@@ -479,3 +479,24 @@ chatter. So there are two effects:
 Checks: job 31963724 (eval_conditions on traversed @ 80k and detfrac25 @ 104k: deterministic vs noisy);
 combined run runs/bones_fix_detfrac_traversed (job 31963725: --det-frac 0.25 --reset-stat traversed
 --rtg-min-steps 1, 12 h). The first traversed run (31957454) was stopped at 6.8 h to free its GPU.
+
+## Check-in 2026-10-23 18:40Z: det-frac is the configuration that holds
+
+eval_conditions (4,096 clips): the traversed run @ 80k scores 0.886 (19 failed) deterministically but
+0.906 (18) with action noise 0.1 — the deterministic drift; detfrac25 @ 104k scores 0.913 (13)
+deterministically and 0.911 (12) with noise — healthy, noise costs a little as it should.
+
+Finished 10 h fix runs (8,192-clip benchmark):
+- detfrac25: 0.909-0.917 from 5 h to 10 h, failures falling to 21 (= ~330 per 128,904); full coverage at
+  5.64 h, after which training return falls (0.55) as the sampler concentrates, without hurting the
+  benchmark.
+- fp32: 0.913 @ 7.33 h, then after full coverage (8.21 h) 0.888, 0.884, 0.859 (50 failed) @ 10 h — the
+  decline is not a bf16 effect.
+- traversed_all (running, 4.98 h): 0.914 (33) @ 4.36 h, 0.911 @ 4.68 h; coverage 0.998 since ~3.3 h;
+  training return down to 0.66 (concentration on hard bins already).
+- detfrac + traversed (running, 1.6 h): 0.867 (83) @ 1.41 h, on track.
+
+Best so far: det-frac 0.25 (25% of environments collect without action noise; not in the paper). Its
+checkpoints are being scored on the full 128,904-clip benchmark (job 31964355,
+runs/bones_fix_detfrac25/eval_full.jsonl, every 4th checkpoint), and a 2-GPU det-frac run is training
+(job 31964356, runs/smimic_bones_2gpu_detfrac, 26 h, 8,192-clip benchmark every 4,000 iterations).

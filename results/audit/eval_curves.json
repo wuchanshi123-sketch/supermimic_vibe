@@ -2700,6 +2700,60 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 108000,
+"hours": 8.5771,
+"norm_return": 0.9173,
+"failed": 22,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 112000,
+"hours": 8.895,
+"norm_return": 0.9162,
+"failed": 28,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 116000,
+"hours": 9.2128,
+"norm_return": 0.9109,
+"failed": 22,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 120000,
+"hours": 9.5313,
+"norm_return": 0.9167,
+"failed": 25,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 124000,
+"hours": 9.849,
+"norm_return": 0.9092,
+"failed": 21,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 125910,
+"hours": 10.0,
+"norm_return": 0.9092,
+"failed": 21,
+"clips": 8192
+},
+{
 "run": "bones_fix_fp32",
 "label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
 "iteration": 4000,
@@ -2868,6 +2922,33 @@
 "hours": 8.704,
 "norm_return": 0.9039,
 "failed": 29,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 80000,
+"hours": 9.1641,
+"norm_return": 0.8888,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 84000,
+"hours": 9.6242,
+"norm_return": 0.884,
+"failed": 28,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 87260,
+"hours": 10.0002,
+"norm_return": 0.8591,
+"failed": 50,
 "clips": 8192
 },
 {
@@ -3129,6 +3210,87 @@
 "hours": 3.0571,
 "norm_return": 0.8992,
 "failed": 43,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 40000,
+"hours": 3.3829,
+"norm_return": 0.903,
+"failed": 39,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 44000,
+"hours": 3.7076,
+"norm_return": 0.9047,
+"failed": 38,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 48000,
+"hours": 4.0327,
+"norm_return": 0.909,
+"failed": 39,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 52000,
+"hours": 4.3579,
+"norm_return": 0.9138,
+"failed": 33,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 56000,
+"hours": 4.6836,
+"norm_return": 0.9113,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 4000,
+"hours": 0.4301,
+"norm_return": 0.6345,
+"failed": 458,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 8000,
+"hours": 0.7579,
+"norm_return": 0.8115,
+"failed": 107,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 12000,
+"hours": 1.0835,
+"norm_return": 0.8469,
+"failed": 109,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 16000,
+"hours": 1.4091,
+"norm_return": 0.867,
+"failed": 83,
 "clips": 8192
 }
 ]

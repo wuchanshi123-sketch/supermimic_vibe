@@ -40,6 +40,7 @@ RUNS = {
   "bones_fix_traversed": ("Fix test: reset sampler updates traversed bins with >= 0.5 s left", "Fig. 2a (diagnosis)", "31957454"),
   "bones_fix_traversed_all": ("Fix test: reset sampler updates every traversed bin (paper's wording)", "Fig. 2a (diagnosis)", "31960983"),
   "bones_fix_detfrac_traversed": ("Fix test: det-frac 0.25 + every-traversed-bin sampler", "Fig. 2a (diagnosis)", "31963725"),
+  "smimic_bones_2gpu_detfrac": ("SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)", "Fig. 2a", "31964356"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.
@@ -344,6 +345,12 @@ def main():
     for d in jsonl(os.path.join(ROOT, "runs", run, "eval.jsonl")):
       ev_rows.append({
         "run": run, "label": label, "iteration": d["it"], "hours": round(d["hours"], 4),
+        "norm_return": round(d["norm_return"], 4), "failed": d["failed"], "clips": d["num_clips"],
+      })
+  for run, (label, _, _) in list(RUNS.items()):
+    for d in jsonl(os.path.join(ROOT, "runs", run, "eval_full.jsonl")):
+      ev_rows.append({
+        "run": run + "_full", "label": label + " (full benchmark)", "iteration": d["it"], "hours": round(d["hours"], 4),
         "norm_return": round(d["norm_return"], 4), "failed": d["failed"], "clips": d["num_clips"],
       })
   data["eval_curves"] = ev_rows

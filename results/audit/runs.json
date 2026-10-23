@@ -213,9 +213,9 @@
 "label": "Fix test: 25% of envs collect without action noise (not in paper)",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953913",
-"status": "running",
-"iterations": 106800,
-"train_hours": 8.481,
+"status": "finished",
+"iterations": 125900,
+"train_hours": 9.999,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -224,9 +224,9 @@
 "label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953914",
-"status": "running",
-"iterations": 78400,
-"train_hours": 8.98,
+"status": "finished",
+"iterations": 87200,
+"train_hours": 9.993,
 "log": "runs/bones_fix_fp32/log.jsonl",
 "evals": "runs/bones_fix_fp32/eval.jsonl"
 },
@@ -247,8 +247,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31960983",
 "status": "running",
-"iterations": 39400,
-"train_hours": 3.334,
+"iterations": 59800,
+"train_hours": 4.992,
 "log": "runs/bones_fix_traversed_all/log.jsonl",
 "evals": "runs/bones_fix_traversed_all/eval.jsonl"
 },
@@ -257,10 +257,21 @@
 "label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31963725",
-"status": "queued",
-"iterations": 0,
-"train_hours": 0,
+"status": "running",
+"iterations": 18600,
+"train_hours": 1.621,
 "log": "runs/bones_fix_detfrac_traversed/log.jsonl",
 "evals": "runs/bones_fix_detfrac_traversed/eval.jsonl"
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"figure": "Fig. 2a",
+"slurm_job": "31964356",
+"status": "running",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/smimic_bones_2gpu_detfrac/log.jsonl",
+"evals": "runs/smimic_bones_2gpu_detfrac/eval.jsonl"
 }
 ]

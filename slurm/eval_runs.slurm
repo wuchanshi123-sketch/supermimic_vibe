@@ -11,11 +11,13 @@
 #SBATCH --output=slurm/logs/%j-%x.out
 #SBATCH --error=slurm/logs/%j-%x.out
 # Scores the not-yet-scored checkpoints of several runs once (benchmark protocol, App. F).
-# Usage (from the repository root): sbatch slurm/eval_runs.slurm <run dir>:<motions.npz> [...]
+# Usage (from the repository root): sbatch slurm/eval_runs.slurm <run dir>:<motions.npz>[:<out file>[:<every>]] [...]
+# (out file defaults to eval.jsonl inside the run dir; every = score every n-th checkpoint)
 set -euo pipefail
 cd "${SLURM_SUBMIT_DIR:-.}"  # submit from the repository root
 source env.sh
 source setup_local_env.sh
-for pair in "$@"; do
-  $SMIMIC_PY -m supermimic.evaluate --run "${pair%%:*}" --motions "${pair#*:}"
+for spec in "$@"; do
+  IFS=: read -r run motions out every <<< "$spec"
+  $SMIMIC_PY -m supermimic.evaluate --run "$run" --motions "$motions" --out "${out:-eval.jsonl}" --every "${every:-1}"
 done

@@ -45,7 +45,7 @@ def main():
       res = evaluate(act, lib, env, clips)
       out[f"{ck} | {name}"] = (round(res["norm_return"], 4), res["failed"])
       print(f"{ck.split('/')[-1]} it {meta['it']:>6d} | {name:20s} | return {res['norm_return']:.4f} failed {res['failed']}/{n_clips}", flush=True)
-  json.dump(out, open("/dev/stdout", "w"), indent=0)
+  print(json.dumps(out))
 
 
 if __name__ == "__main__":
