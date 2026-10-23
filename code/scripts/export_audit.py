@@ -239,7 +239,13 @@ def claims(data):
                    + (f"; within 8.1 h (~3 H100-h): {a['norm_return']:.3f} ({a['failed']:,} failed)" if a else ""))
       if sonic:
         beat = next((r for r in b1 if r["norm_return"] > sonic["norm_return"]), None)
+        both = next((r for r in b1 if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]), None)
         parts.append(f"passes SONIC's return at {beat['hours']:.2f} h" if beat else "has not passed SONIC's return yet")
+        if both:
+          parts.append(f"beats it on return and failed clips at {both['hours']:.2f} h ({both['norm_return']:.3f}, {both['failed']:,} failed)")
+      last = b1[-1]
+      if last["norm_return"] < 0.5:
+        parts.append(f"then collapsed ({last['norm_return']:.2f} at {last['hours']:.1f} h): the reset sampler concentrates on near-impossible bins once all are visited (see notes/RESULTS.md)")
     if b2:
       bb = max(b2, key=lambda r: r["norm_return"])
       parts.append(f"2 A6000s: best {bb['norm_return']:.3f} ({bb['failed']:,} failed) at {bb['hours']:.1f} h")
@@ -248,9 +254,12 @@ def claims(data):
   def bones_status():
     if not (b1 and sonic):
       return "In progress"
-    best = max(b1, key=lambda r: r["norm_return"])
-    if best["norm_return"] > sonic["norm_return"] and best["failed"] < sonic["failed"]:
+    both = [r for r in b1 if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]]
+    # The paper's margin (0.94 and 25 failed vs SONIC's 179 at 3 h) is far larger than ours.
+    if any(r["norm_return"] >= 0.93 and r["failed"] <= 100 for r in b1):
       return "Reproduced"
+    if both:
+      return "Partly reproduced"
     return "In progress" if reg.get("smimic_bones_1gpu") == "running" else "Not reproduced"
 
   def gpuh_text():

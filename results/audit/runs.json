@@ -214,8 +214,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953913",
 "status": "running",
-"iterations": 64000,
-"train_hours": 5.106,
+"iterations": 85600,
+"train_hours": 6.8,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -225,8 +225,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953914",
 "status": "running",
-"iterations": 47700,
-"train_hours": 5.481,
+"iterations": 63200,
+"train_hours": 7.236,
 "log": "runs/bones_fix_fp32/log.jsonl",
 "evals": "runs/bones_fix_fp32/eval.jsonl"
 },
@@ -236,8 +236,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31957454",
 "status": "running",
-"iterations": 40700,
-"train_hours": 3.438,
+"iterations": 61200,
+"train_hours": 5.118,
 "log": "runs/bones_fix_traversed/log.jsonl",
 "evals": "runs/bones_fix_traversed/eval.jsonl"
 },
@@ -246,9 +246,9 @@
 "label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31960983",
-"status": "queued",
-"iterations": 0,
-"train_hours": 0,
+"status": "running",
+"iterations": 19500,
+"train_hours": 1.69,
 "log": "runs/bones_fix_traversed_all/log.jsonl",
 "evals": "runs/bones_fix_traversed_all/eval.jsonl"
 }

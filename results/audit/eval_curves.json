@@ -2610,6 +2610,51 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 68000,
+"hours": 5.418,
+"norm_return": 0.9131,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 72000,
+"hours": 5.73,
+"norm_return": 0.9174,
+"failed": 35,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 76000,
+"hours": 6.0421,
+"norm_return": 0.9081,
+"failed": 34,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 80000,
+"hours": 6.357,
+"norm_return": 0.9097,
+"failed": 32,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 84000,
+"hours": 6.6724,
+"norm_return": 0.9151,
+"failed": 28,
+"clips": 8192
+},
+{
 "run": "bones_fix_fp32",
 "label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
 "iteration": 4000,
@@ -2709,6 +2754,42 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 48000,
+"hours": 5.5149,
+"norm_return": 0.9079,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 52000,
+"hours": 5.9634,
+"norm_return": 0.9024,
+"failed": 43,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 56000,
+"hours": 6.4125,
+"norm_return": 0.9071,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 60000,
+"hours": 6.8699,
+"norm_return": 0.8987,
+"failed": 36,
+"clips": 8192
+},
+{
 "run": "bones_fix_traversed",
 "label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
 "iteration": 4000,
@@ -2796,6 +2877,87 @@
 "hours": 3.3806,
 "norm_return": 0.9039,
 "failed": 41,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 44000,
+"hours": 3.7073,
+"norm_return": 0.9077,
+"failed": 50,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 48000,
+"hours": 4.034,
+"norm_return": 0.9072,
+"failed": 51,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 52000,
+"hours": 4.3606,
+"norm_return": 0.913,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 56000,
+"hours": 4.6896,
+"norm_return": 0.9108,
+"failed": 38,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 60000,
+"hours": 5.0191,
+"norm_return": 0.9029,
+"failed": 38,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 4000,
+"hours": 0.4256,
+"norm_return": 0.674,
+"failed": 369,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 8000,
+"hours": 0.7501,
+"norm_return": 0.8169,
+"failed": 148,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 12000,
+"hours": 1.0761,
+"norm_return": 0.8599,
+"failed": 97,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 16000,
+"hours": 1.4022,
+"norm_return": 0.869,
+"failed": 80,
 "clips": 8192
 }
 ]

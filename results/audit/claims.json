@@ -76,8 +76,8 @@
 "where": "Fig. 2a, Table A.4",
 "claim": "On 129,514 BONES-SEED motions, 1 GPU x 3 h beats SONIC (return 0.90; 25 vs 179 failed); 2 GPUs x 9.8 h: 0 failed",
 "paper": "25 / 0 failed vs SONIC 179",
-"ours": "SONIC checkpoint in our simulator: 0.893, 642 failed (with SONIC's hip motor model too: 0.893, 629); SuperMimic 1 A6000: best 0.914 (695 failed) at 4.7 h; within 8.1 h (~3 H100-h): 0.914 (695 failed); passes SONIC's return at 3.04 h; 2 A6000s: best 0.909 (791 failed) at 2.4 h",
-"status": "Not reproduced"
+"ours": "SONIC checkpoint in our simulator: 0.893, 642 failed (with SONIC's hip motor model too: 0.893, 629); SuperMimic 1 A6000: best 0.914 (695 failed) at 4.7 h; within 8.1 h (~3 H100-h): 0.914 (695 failed); passes SONIC's return at 3.04 h; beats it on return and failed clips at 4.33 h (0.906, 637 failed); then collapsed (0.02 at 13.4 h): the reset sampler concentrates on near-impossible bins once all are visited (see notes/RESULTS.md); 2 A6000s: best 0.909 (791 failed) at 2.4 h",
+"status": "Partly reproduced"
 },
 {
 "id": "C11",

@@ -438,3 +438,21 @@ of clips are never updated and keep G = 0; its coverage levels off near 0.93 and
 softmax mass, which would avoid the collapse for a different reason (resets at clip ends) and confound
 the test. New run runs/bones_fix_traversed_all (job 31960983, --rtg-min-steps 1): every bin a rollout
 enters is updated, as the paper words it.
+
+## Check-in 2026-10-23 14:30Z: the sampler explanation holds for the det-frac control
+
+| run | trained | bins visited (1.0 at) | train return | falls | 8-step WM error | latest benchmark (8,192 clips) |
+| --- | --- | --- | --- | --- | --- | --- |
+| detfrac25 | 6.76 h | 1.000 (5.64 h) | 0.844 -> 0.588 | 5.9% | 0.14 -> 0.27 | 0.915 (28 failed) |
+| fp32 | 7.20 h | 0.939 | 0.846 | 0.7% | 0.13 | 0.899 (36) |
+| traversed (>= 25 steps) | 5.07 h | 0.936 (levels off) | 0.785 | 0.4% | 0.14 | 0.903 (38) |
+| traversed_all | 1.65 h | 0.883 | 0.810 | 0.9% | 0.17 | 0.869 (80) @ 1.40 h |
+
+detfrac25 reached full coverage at 5.64 h and within an hour showed the faithful run's collapse onset
+in training (return 0.844 -> 0.588, falls 5.9%, WM error doubled); its benchmark has not dropped yet (the
+faithful run's benchmark lagged its training return by 1-2 h). Sampler statistics
+(code/scripts/dev/sampler_stats.py) of the newest checkpoints: detfrac25 @ 84k has half of the softmax
+mass on 1,383 bins of 936 clips (handstands lead), the same concentration as the faithful run; the
+first traversed run @ 60k has it spread over 32,884 never-updated final bins of 32,883 clips (no
+concentration); fp32 @ 60k still has unvisited bins. Withholding action noise from a quarter of the
+environments therefore does not prevent the collapse; the reset sampler's concentration does cause it.
