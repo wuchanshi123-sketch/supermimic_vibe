@@ -3258,6 +3258,51 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 60000,
+"hours": 5.0086,
+"norm_return": 0.912,
+"failed": 36,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 64000,
+"hours": 5.3335,
+"norm_return": 0.9066,
+"failed": 43,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 68000,
+"hours": 5.6574,
+"norm_return": 0.9092,
+"failed": 34,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 72000,
+"hours": 5.9813,
+"norm_return": 0.9062,
+"failed": 36,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 76000,
+"hours": 6.3066,
+"norm_return": 0.9043,
+"failed": 39,
+"clips": 8192
+},
+{
 "run": "bones_fix_detfrac_traversed",
 "label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
 "iteration": 4000,
@@ -3292,5 +3337,158 @@
 "norm_return": 0.867,
 "failed": 83,
 "clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 20000,
+"hours": 1.7353,
+"norm_return": 0.8828,
+"failed": 58,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 24000,
+"hours": 2.0627,
+"norm_return": 0.8918,
+"failed": 53,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 28000,
+"hours": 2.3941,
+"norm_return": 0.8933,
+"failed": 48,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 32000,
+"hours": 2.7244,
+"norm_return": 0.9038,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 36000,
+"hours": 3.0508,
+"norm_return": 0.904,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 4000,
+"hours": 0.4531,
+"norm_return": 0.6398,
+"failed": 230,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 8000,
+"hours": 0.8036,
+"norm_return": 0.817,
+"failed": 123,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 12000,
+"hours": 1.1539,
+"norm_return": 0.8714,
+"failed": 107,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 16000,
+"hours": 1.5055,
+"norm_return": 0.8838,
+"failed": 78,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 16000,
+"hours": 1.36,
+"norm_return": 0.8687,
+"failed": 1570,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 32000,
+"hours": 2.6115,
+"norm_return": 0.8957,
+"failed": 1211,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 48000,
+"hours": 3.86,
+"norm_return": 0.9087,
+"failed": 623,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 64000,
+"hours": 5.1063,
+"norm_return": 0.9062,
+"failed": 601,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 80000,
+"hours": 6.357,
+"norm_return": 0.91,
+"failed": 537,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 96000,
+"hours": 7.6236,
+"norm_return": 0.9162,
+"failed": 413,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 112000,
+"hours": 8.895,
+"norm_return": 0.9167,
+"failed": 416,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac25_full",
+"label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 124000,
+"hours": 9.849,
+"norm_return": 0.909,
+"failed": 345,
+"clips": 128904
 }
 ]

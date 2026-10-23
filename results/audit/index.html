@@ -160,7 +160,7 @@
   <section class="sm-page" id="bones" role="tabpanel" aria-labelledby="tab-bones" hidden>
     <div class="sm-card" id="card-bones-curve">
       <h3>Benchmark return on the filtered BONES-SEED set (Fig. 2a)</h3>
-      <p class="sm-note">Normalized return on every one of the 128,904 filtered BONES-SEED clips (261 h), each played once from its first frame with no randomization or noise. Solid lines are our runs on RTX A6000s, dashed lines the paper's on H100s (its benchmark has 129,514 clips). The horizontal axis is GPU-hours on a log scale, as in the paper, so the 2-GPU runs are drawn at twice their wall-clock time. An A6000 runs SuperMimic about 2.7 times slower per iteration than an H100. Flat lines mark SONIC's released checkpoint.</p>
+      <p class="sm-note">Normalized return on every one of the 128,904 filtered BONES-SEED clips (261 h), each played once from its first frame with no randomization or noise. Solid lines are our runs on RTX A6000s, dashed lines the paper's on H100s (its benchmark has 129,514 clips). The horizontal axis is GPU-hours on a log scale, as in the paper, so the 2-GPU runs are drawn at twice their wall-clock time. An A6000 runs SuperMimic about 2.7 times slower per iteration than an H100. Flat lines mark SONIC's released checkpoint. Our faithful runs decline after a few hours (see the Claims tab, C10); the "action-noise fix" run has 25% of its environments collect without exploration noise, which is not in the paper.</p>
       <ul class="sm-legend" id="legend-bones" data-source="eval_curves paper_curves sonic_bones"></ul>
       <div class="sm-chart sm-tall dash-skeleton" id="chart-bones" data-source="eval_curves paper_curves sonic_bones"></div>
     </div>
@@ -660,6 +660,7 @@ $SMIMIC_PY -m supermimic.evaluate --run runs/smimic_lafan1_1gpu --out eval_reche
     const series = [
       { name: 'SuperMimic, ours (1 A6000)', color: C[0], points: pick('smimic_bones_1gpu', 1), marks: true },
       { name: 'SuperMimic, ours (2 A6000s)', color: C[2], points: pick('smimic_bones_2gpu', 2), marks: true },
+      { name: 'SuperMimic + action-noise fix, ours (1 A6000)', color: C[3], points: pick('bones_fix_detfrac25_full', 1), marks: true },
       { name: 'SuperMimic, paper (1 H100)', color: C[0], dash: true, opacity: 0.6, points: ppick('Paper SuperMimic BONES-SEED, 1 H100') },
       { name: 'SuperMimic, paper (2 H100s)', color: C[2], dash: true, opacity: 0.6, points: ppick('Paper SuperMimic BONES-SEED, 2 H100 (GPU-hours)') },
     ];

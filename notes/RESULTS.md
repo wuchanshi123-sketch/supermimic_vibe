@@ -500,3 +500,29 @@ Best so far: det-frac 0.25 (25% of environments collect without action noise; no
 checkpoints are being scored on the full 128,904-clip benchmark (job 31964355,
 runs/bones_fix_detfrac25/eval_full.jsonl, every 4th checkpoint), and a 2-GPU det-frac run is training
 (job 31964356, runs/smimic_bones_2gpu_detfrac, 26 h, 8,192-clip benchmark every 4,000 iterations).
+
+## det-frac on the full BONES-SEED benchmark — 2026-10-23 20:45Z
+
+runs/bones_fix_detfrac25 (1 A6000, 25% of environments collect without action noise; not in the paper),
+every 4th checkpoint scored on all 128,904 clips (eval_full.jsonl):
+
+| checkpoint | hours | normalized return | failed |
+| --- | --- | --- | --- |
+| 16k | 1.36 | 0.869 | 1,570 |
+| 32k | 2.61 | 0.896 | 1,211 |
+| 48k | 3.86 | 0.909 | 623 |
+| 64k | 5.11 | 0.906 | 601 |
+| 80k | 6.36 | 0.910 | 537 |
+| 96k | 7.62 | 0.916 | 413 |
+| 112k | 8.89 | 0.917 | 416 |
+| 124k | 9.85 | 0.909 | 345 |
+
+It beats SONIC in our simulator (0.893, 642 failed) on both return and failed clips from 3.86 h on and
+keeps improving in failed clips through 10 h, with no collapse. It does not reach the paper (0.94 and 25
+failed at 3 H100-h, ~8 A6000-h; 0.96 at 9 H100-h): at ~8 A6000-h we are at 0.916 / 413. Claims C10 (now
+"partly reproduced") and C12 ("reproduced": 3.04 A6000-h to pass SONIC's return, 3.86 A6000-h to beat it
+on both counts, vs ~21,000 L40-h) show the faithful and the fixed runs separately.
+
+Other runs (8,192 clips): traversed_all 0.904-0.914 from 3.4 to 6.3 h (coverage 0.998, no clear decline
+yet); detfrac + traversed 0.904 (42) @ 3.05 h; 2-GPU det-frac 0.884 (78) @ 1.51 h. The latter two share
+node301 and run at 0.59 / 0.48 s per iteration instead of ~0.29 / 0.33.
