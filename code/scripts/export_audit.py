@@ -35,6 +35,8 @@ RUNS = {
   "sweep_bones_1h": ("Dataset sweep, 1 h of BONES-SEED", "Fig. 2b,c", "31950522"),
   "sweep_bones_7h": ("Dataset sweep, 7 h of BONES-SEED", "Fig. 2b,c", "31950523"),
   "sweep_bones_40h": ("Dataset sweep, 40 h of BONES-SEED", "Fig. 2b,c", "31950524"),
+  "bones_fix_detfrac25": ("Fix test: 25% of envs collect without action noise (not in paper)", "Fig. 2a (diagnosis)", "31953913"),
+  "bones_fix_fp32": ("Fix test: fp32 networks instead of bf16 (paper: TF32)", "Fig. 2a (diagnosis)", "31953914"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.

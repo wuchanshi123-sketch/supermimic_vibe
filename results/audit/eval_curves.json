@@ -1773,6 +1773,33 @@
 "clips": 128904
 },
 {
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 76000,
+"hours": 6.2817,
+"norm_return": 0.8904,
+"failed": 602,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 80000,
+"hours": 6.6084,
+"norm_return": 0.88,
+"failed": 637,
+"clips": 128904
+},
+{
+"run": "smimic_bones_1gpu",
+"label": "SuperMimic, BONES-SEED, 1 GPU",
+"iteration": 84000,
+"hours": 6.9342,
+"norm_return": 0.8839,
+"failed": 566,
+"clips": 128904
+},
+{
 "run": "smimic_bones_2gpu",
 "label": "SuperMimic, BONES-SEED, 2 GPUs",
 "iteration": 4000,
@@ -1923,6 +1950,24 @@
 "hours": 5.8857,
 "norm_return": 0.7071,
 "failed": 5912,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 72000,
+"hours": 6.2187,
+"norm_return": 0.4861,
+"failed": 64424,
+"clips": 128904
+},
+{
+"run": "smimic_bones_2gpu",
+"label": "SuperMimic, BONES-SEED, 2 GPUs",
+"iteration": 76000,
+"hours": 6.5499,
+"norm_return": 0.6793,
+"failed": 2478,
 "clips": 128904
 },
 {

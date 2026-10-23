@@ -159,8 +159,8 @@
 "figure": "Fig. 2a",
 "slurm_job": "31950477",
 "status": "running",
-"iterations": 76700,
-"train_hours": 6.339,
+"iterations": 86900,
+"train_hours": 7.171,
 "log": "runs/smimic_bones_1gpu/log.jsonl",
 "evals": "runs/smimic_bones_1gpu/eval.jsonl"
 },
@@ -169,9 +169,9 @@
 "label": "SuperMimic, BONES-SEED, 2 GPUs",
 "figure": "Fig. 2a",
 "slurm_job": "31950519",
-"status": "running",
-"iterations": 71300,
-"train_hours": 6.161,
+"status": "stopped",
+"iterations": 81300,
+"train_hours": 6.989,
 "log": "runs/smimic_bones_2gpu/log.jsonl",
 "evals": "runs/smimic_bones_2gpu/eval.jsonl"
 },
@@ -181,8 +181,8 @@
 "figure": "Fig. 2b,c",
 "slurm_job": "31950522",
 "status": "running",
-"iterations": 74500,
-"train_hours": 6.142,
+"iterations": 84900,
+"train_hours": 6.98,
 "log": "runs/sweep_bones_1h/log.jsonl",
 "evals": "runs/sweep_bones_1h/eval.jsonl"
 },
@@ -192,8 +192,8 @@
 "figure": "Fig. 2b,c",
 "slurm_job": "31950523",
 "status": "running",
-"iterations": 76000,
-"train_hours": 6.134,
+"iterations": 86800,
+"train_hours": 6.971,
 "log": "runs/sweep_bones_7h/log.jsonl",
 "evals": "runs/sweep_bones_7h/eval.jsonl"
 },
@@ -203,9 +203,31 @@
 "figure": "Fig. 2b,c",
 "slurm_job": "31950524",
 "status": "running",
-"iterations": 72900,
-"train_hours": 6.138,
+"iterations": 83000,
+"train_hours": 6.965,
 "log": "runs/sweep_bones_40h/log.jsonl",
 "evals": "runs/sweep_bones_40h/eval.jsonl"
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31953913",
+"status": "running",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/bones_fix_detfrac25/log.jsonl",
+"evals": "runs/bones_fix_detfrac25/eval.jsonl"
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31953914",
+"status": "running",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/bones_fix_fp32/log.jsonl",
+"evals": "runs/bones_fix_fp32/eval.jsonl"
 }
 ]

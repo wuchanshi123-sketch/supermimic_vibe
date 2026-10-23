@@ -330,3 +330,32 @@ fine deterministically at 60k. Job 31953843 (code/scripts/dev/rollout_probe.py) 
 deterministic rollouts fail (height vs tilt, timing, action chatter).
 
 Latest benchmark: 1 GPU 0.899 (528 failed) @ 5.95 h; 2 GPUs 0.707 (5,912 failed) @ 5.89 h.
+
+## What fails: action chatter in the deterministic closed loop — 2026-10-23 06:00Z
+
+code/scripts/dev/rollout_probe.py, 1,024 BONES-SEED clips of at least 10 s, benchmark protocol:
+
+| checkpoint, condition | failed (height / tilt) | mean |a_t - a_{t-1}| | mean |qd| (rad/s) | mean root height error (m) |
+| --- | --- | --- | --- | --- |
+| 2 GPUs 28k, deterministic | 5 (2 / 3) | 0.045 | 0.44 | 0.009 |
+| 2 GPUs 56k, deterministic | 98 (87 / 11) | 0.092 | 0.66 | 0.018 |
+| 2 GPUs 56k, action noise 0.1 | 2 (2 / 0) | 0.145 (mostly the noise) | 0.59 | 0.009 |
+| 1 GPU 72k, deterministic | 1 (1 / 0) | 0.049 | 0.47 | 0.009 |
+
+The degraded policy's deterministic actions change twice as much per step as a healthy policy's, joint
+speeds are higher than even with injected noise, the root sinks (height error doubles) and the clips end
+by the height termination. Under N(0, 0.1^2) action noise the same policy tracks normally. The 1-GPU
+policy at 60k behaves normally under all conditions (benchmark 0.908, obs noise 0.907, action noise
+0.894, DR 0.905, all 0.885 on 4,096 clips).
+
+Since then the 1-GPU run has begun to slide as well (benchmark 0.914 @ 4.65 h, 0.899, 0.890, 0.880,
+0.884 @ 6.93 h; failures 528-637), while the paper's 1-GPU curve rises to 0.96. The 2-GPU run swung
+between 0.49 and 0.71 and was stopped at 7.0 h (job 31950519 cancelled with its scorer; checkpoints kept).
+
+Two fix tests on one A6000, 10 h each, in-training benchmark on a fixed 8,192-clip subset every 4,000
+iterations:
+- runs/bones_fix_detfrac25 (job 31953913): 25% of the environments collect without action noise
+  (--det-frac 0.25; not in the paper), so the replay buffer holds deterministic closed-loop states;
+- runs/bones_fix_fp32 (job 31953914): networks in fp32 instead of bf16 autocast (--amp false; the paper
+  uses TF32), to rule out precision.
+The faithful 1-GPU run continues to its 16 h budget.

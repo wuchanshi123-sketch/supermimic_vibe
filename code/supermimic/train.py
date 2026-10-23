@@ -52,6 +52,9 @@ class TrainCfg:
   critic_epochs: int = 5
   critic_minibatches: int = 4
   action_noise: float = 0.1
+  # Not in the paper (0 = paper): share of environments that collect without action noise,
+  # so the replay buffer also holds states of the deterministic closed loop.
+  det_frac: float = 0.0
   use_critic: bool = True
   # Bookkeeping.
   log_every: int = 100
@@ -238,7 +241,10 @@ class Trainer:
     self.policy.obs_norm.update(obs)
     self.policy.goal_norm.update(goal)
     a = self.policy(obs, goal)
-    a = a + self.cfg.action_noise * torch.randn_like(a)
+    noise = self.cfg.action_noise * torch.randn_like(a)
+    if self.cfg.det_frac > 0:
+      noise[: int(round(self.cfg.det_frac * a.shape[0]))] = 0.0
+    a = a + noise
     s_flat = state_to_flat(env.state)
     xi, frame, ep = env.xi.clone(), env.frame.clone(), env.ep_id.clone()
     s_next, info = env.step(a)
