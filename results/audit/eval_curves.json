@@ -2655,6 +2655,51 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 88000,
+"hours": 6.9899,
+"norm_return": 0.9144,
+"failed": 28,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 92000,
+"hours": 7.3067,
+"norm_return": 0.9156,
+"failed": 24,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 96000,
+"hours": 7.6236,
+"norm_return": 0.9161,
+"failed": 21,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 100000,
+"hours": 7.9409,
+"norm_return": 0.9154,
+"failed": 26,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 104000,
+"hours": 8.2582,
+"norm_return": 0.9134,
+"failed": 24,
+"clips": 8192
+},
+{
 "run": "bones_fix_fp32",
 "label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
 "iteration": 4000,
@@ -2787,6 +2832,42 @@
 "hours": 6.8699,
 "norm_return": 0.8987,
 "failed": 36,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 64000,
+"hours": 7.3281,
+"norm_return": 0.9128,
+"failed": 44,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 68000,
+"hours": 7.7864,
+"norm_return": 0.901,
+"failed": 39,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 72000,
+"hours": 8.245,
+"norm_return": 0.8981,
+"failed": 34,
+"clips": 8192
+},
+{
+"run": "bones_fix_fp32",
+"label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
+"iteration": 76000,
+"hours": 8.704,
+"norm_return": 0.9039,
+"failed": 29,
 "clips": 8192
 },
 {
@@ -2925,6 +3006,51 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 64000,
+"hours": 5.3488,
+"norm_return": 0.9052,
+"failed": 35,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 68000,
+"hours": 5.6797,
+"norm_return": 0.8904,
+"failed": 36,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 72000,
+"hours": 6.0109,
+"norm_return": 0.8835,
+"failed": 35,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 76000,
+"hours": 6.3424,
+"norm_return": 0.8743,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed",
+"label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
+"iteration": 80000,
+"hours": 6.6746,
+"norm_return": 0.8858,
+"failed": 40,
+"clips": 8192
+},
+{
 "run": "bones_fix_traversed_all",
 "label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
 "iteration": 4000,
@@ -2958,6 +3084,51 @@
 "hours": 1.4022,
 "norm_return": 0.869,
 "failed": 80,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 20000,
+"hours": 1.7319,
+"norm_return": 0.8811,
+"failed": 54,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 24000,
+"hours": 2.0637,
+"norm_return": 0.8932,
+"failed": 47,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 28000,
+"hours": 2.396,
+"norm_return": 0.9007,
+"failed": 51,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 32000,
+"hours": 2.7278,
+"norm_return": 0.9032,
+"failed": 44,
+"clips": 8192
+},
+{
+"run": "bones_fix_traversed_all",
+"label": "Fix test: reset sampler updates every traversed bin (paper's wording)",
+"iteration": 36000,
+"hours": 3.0571,
+"norm_return": 0.8992,
+"failed": 43,
 "clips": 8192
 }
 ]

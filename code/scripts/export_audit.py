@@ -39,6 +39,7 @@ RUNS = {
   "bones_fix_fp32": ("Fix test: fp32 networks instead of bf16 (paper: TF32)", "Fig. 2a (diagnosis)", "31953914"),
   "bones_fix_traversed": ("Fix test: reset sampler updates traversed bins with >= 0.5 s left", "Fig. 2a (diagnosis)", "31957454"),
   "bones_fix_traversed_all": ("Fix test: reset sampler updates every traversed bin (paper's wording)", "Fig. 2a (diagnosis)", "31960983"),
+  "bones_fix_detfrac_traversed": ("Fix test: det-frac 0.25 + every-traversed-bin sampler", "Fig. 2a (diagnosis)", "31963725"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.

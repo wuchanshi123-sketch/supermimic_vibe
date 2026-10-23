@@ -456,3 +456,26 @@ mass on 1,383 bins of 936 clips (handstands lead), the same concentration as the
 first traversed run @ 60k has it spread over 32,884 never-updated final bins of 32,883 clips (no
 concentration); fp32 @ 60k still has unvisited bins. Withholding action noise from a quarter of the
 environments therefore does not prevent the collapse; the reset sampler's concentration does cause it.
+
+## Check-in 2026-10-23 16:40Z: two separate effects
+
+| run | full coverage | training after coverage | 8,192-clip benchmark |
+| --- | --- | --- | --- |
+| detfrac25 | 5.64 h | return 0.85 -> 0.53, falls 5.8%, WM error 0.14 -> 0.21 | holds: 0.913-0.916, failures down to 21-26 @ 8.3 h (~100k it) |
+| fp32 | 8.21 h | return -> 0.63, falls 6% | 0.904 (29) @ 8.7 h (~78k it), not down yet |
+| traversed (>= 25 steps) | never (0.936) | steady: return 0.80, falls 0.4%, WM error 0.12 | declines: 0.913 @ 4.36 h -> 0.874-0.886 @ 6.0-6.7 h |
+| traversed_all | ~3.3 h (0.998) | return 0.82 -> 0.63, falls 4.2%, WM error 0.29 | 0.899 (43) @ 3.06 h |
+
+Correction to the earlier reading: training return is not a measure of the policy here. Whenever the
+sampler covers all bins and concentrates on hard ones, training episodes start in hard bins, so training
+return falls, falls rise and the WM error grows; but detfrac25 shows the same signature while its
+benchmark keeps improving. Conversely the traversed run never concentrates (training stays healthy) and
+its benchmark still declines, like the faithful run's first decline and the 2-GPU run's deterministic
+chatter. So there are two effects:
+1. benchmark decline from the deterministic closed loop drifting away from the noisy-action data
+   (2-GPU diagnosis above); det-frac (25% of environments without action noise) prevents it so far;
+2. sampler concentration on near-impossible bins once all are visited, which degrades the training data
+   and in the faithful run turned the decline into a total collapse.
+Checks: job 31963724 (eval_conditions on traversed @ 80k and detfrac25 @ 104k: deterministic vs noisy);
+combined run runs/bones_fix_detfrac_traversed (job 31963725: --det-frac 0.25 --reset-stat traversed
+--rtg-min-steps 1, 12 h). The first traversed run (31957454) was stopped at 6.8 h to free its GPU.

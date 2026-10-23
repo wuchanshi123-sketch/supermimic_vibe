@@ -214,8 +214,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953913",
 "status": "running",
-"iterations": 85600,
-"train_hours": 6.8,
+"iterations": 106800,
+"train_hours": 8.481,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -225,8 +225,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31953914",
 "status": "running",
-"iterations": 63200,
-"train_hours": 7.236,
+"iterations": 78400,
+"train_hours": 8.98,
 "log": "runs/bones_fix_fp32/log.jsonl",
 "evals": "runs/bones_fix_fp32/eval.jsonl"
 },
@@ -235,9 +235,9 @@
 "label": "Fix test: reset sampler updates traversed bins with >= 0.5 s left",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31957454",
-"status": "running",
-"iterations": 61200,
-"train_hours": 5.118,
+"status": "stopped",
+"iterations": 81200,
+"train_hours": 6.775,
 "log": "runs/bones_fix_traversed/log.jsonl",
 "evals": "runs/bones_fix_traversed/eval.jsonl"
 },
@@ -247,9 +247,20 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31960983",
 "status": "running",
-"iterations": 19500,
-"train_hours": 1.69,
+"iterations": 39400,
+"train_hours": 3.334,
 "log": "runs/bones_fix_traversed_all/log.jsonl",
 "evals": "runs/bones_fix_traversed_all/eval.jsonl"
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31963725",
+"status": "queued",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/bones_fix_detfrac_traversed/log.jsonl",
+"evals": "runs/bones_fix_detfrac_traversed/eval.jsonl"
 }
 ]
