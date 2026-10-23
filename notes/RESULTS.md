@@ -359,3 +359,35 @@ iterations:
 - runs/bones_fix_fp32 (job 31953914): networks in fp32 instead of bf16 autocast (--amp false; the paper
   uses TF32), to rule out precision.
 The faithful 1-GPU run continues to its 16 h budget.
+
+## Cause of the BONES-SEED collapse: the reset sampler concentrates on near-impossible bins — 2026-10-23 08:30Z
+
+The faithful 1-GPU run collapsed after ~5.8 h: benchmark 0.914 @ 4.65 h -> 0.836 @ 7.91 h -> 0.759
+(9,503 failed) @ 8.89 h; training return 0.84 -> 0.47; the 8-step WM error doubled (0.13 -> 0.28) while
+the imagined return stayed at ~6.9 and the imagined joint-limit and action-rate penalties grew (the policy
+believes it does fine in imagination). The onset coincides with the reset sampler having visited every
+1 s bin (bins_visited 0.96 @ 5.4 h, 1.00 @ 6.2 h). Until then unvisited bins (G = 0) carry the softmax
+term's mass, so its 40% of resets explore new bins uniformly; afterwards softmax_b(-25 G_b) concentrates on
+the lowest-return bins. code/scripts/dev/sampler_stats.py on the run's checkpoints:
+
+| checkpoint | bins visited | bins with G < 0.05 | their share of all resets | half the softmax mass on |
+| --- | --- | --- | --- | --- |
+| 48k | 0.79 | 213,441 (unvisited) | 0.59 | 107,544 bins / 53,194 clips |
+| 72k | 1.00 | 2,249 | 0.18 | 4,549 bins / 3,774 clips (handstands, ...) |
+| 108k | 1.00 | 180 | 0.27 | 150 bins / 150 clips (crawl, crouch, ...) |
+
+So by 108k a quarter of all simulator resets start in ~180 near-impossible bins: the replay buffer fills
+with falls from motions the robot cannot do, the world model fits them (its error on typical motion
+rises), and the policy degrades on everything else. On LAFAN1 (8.8k bins, all learnable) the same
+sampler is harmless, which is why the 12 h LAFAN1 run kept improving.
+
+Our G_b update differs from the paper's wording: we update only the bin an episode starts in, with that
+episode's return; the paper keeps "a running estimate of the discounted return from [each bin], updated
+on the policy's own rollouts", i.e. every bin a rollout passes through, with its return-to-go. Then the
+bins leading into a hard segment, not only those starting in it, carry low G, and impossible starting
+states are diluted by the many bins traversed by every episode. Implemented as --reset-stat traversed
+(sim_env.EnvCfg.reset_stat; every entered bin gets the discounted return-to-go from its entry step over
+the largest return attainable over the same remaining horizon; default "start" = all earlier runs).
+Test run runs/bones_fix_traversed (job 31957425, 1 A6000, 12 h, 8,192-clip benchmark every 4,000
+iterations). The det-frac and fp32 tests keep running as controls; if the sampler is the cause, they will
+collapse at a similar point.

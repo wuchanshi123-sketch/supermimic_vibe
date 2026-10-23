@@ -45,6 +45,12 @@ class EnvCfg:
   p_past: float = 0.1
   softmax_temp: float = 25.0
   bin_ema: float = 0.1
+  # How the per-bin return estimates G_b are updated: "start" = only the bin an episode starts
+  # in, with the episode's return; "traversed" = every bin the episode passes through, with its
+  # discounted return-to-go from there (the paper: "a running estimate of the discounted return
+  # from it, updated on the policy's own rollouts"). Both normalize by the largest return
+  # attainable over the same remaining horizon.
+  reset_stat: str = "start"
   # BeyondMimic reset randomization.
   pose_range: tuple = ((-0.05, 0.05), (-0.05, 0.05), (-0.01, 0.01), (-0.1, 0.1), (-0.1, 0.1), (-0.2, 0.2))
   vel_range: tuple = ((-0.5, 0.5), (-0.5, 0.5), (-0.2, 0.2), (-0.52, 0.52), (-0.52, 0.52), (-0.78, 0.78))
@@ -151,6 +157,8 @@ class TrackingSimEnv:
     self.ep_disc_ret = torch.zeros(n, device=device)
     self.ep_disc_max = torch.zeros(n, device=device)
     self.ep_ret = torch.zeros(n, device=device)
+    if cfg.reset_stat == "traversed":
+      self.rew_hist = torch.zeros(n, self.max_ep_len, device=device)
     self.eval_mode = False
     self.state = None
     self.goal_buf = None
@@ -354,6 +362,8 @@ class TrackingSimEnv:
     self.ep_disc_ret += disc * r
     self.ep_disc_max += disc * self.tcfg.max_step_reward
     self.ep_ret += r
+    if self.cfg.reset_stat == "traversed":
+      self.rew_hist[torch.arange(self.num_envs, device=self.device), (self.ep_len - 1).clamp(max=self.max_ep_len - 1)] = r
     info = {
       "reward": r,
       "terms": out["terms"],
@@ -372,13 +382,16 @@ class TrackingSimEnv:
     done_ids = done.nonzero(as_tuple=False).squeeze(-1)
     if len(done_ids):
       # A terminated episode scores 0 for the remaining frames it could have run.
-      ratio = self.ep_disc_ret[done_ids] / self._max_disc_return(done_ids)
-      b = self.ep_bin[done_ids]
-      a = self.cfg.bin_ema
-      G_old = self.bin_G[b]
-      new = torch.where(self.bin_visits[b] > 0, (1 - a) * G_old + a * ratio, ratio)
-      self.bin_G[b] = new.clamp(0, 1)
-      self.bin_visits[b] += 1
+      if self.cfg.reset_stat == "traversed":
+        self._update_bins_traversed(done_ids)
+      else:
+        ratio = self.ep_disc_ret[done_ids] / self._max_disc_return(done_ids)
+        b = self.ep_bin[done_ids]
+        a = self.cfg.bin_ema
+        G_old = self.bin_G[b]
+        new = torch.where(self.bin_visits[b] > 0, (1 - a) * G_old + a * ratio, ratio)
+        self.bin_G[b] = new.clamp(0, 1)
+        self.bin_visits[b] += 1
       info["done_ep_return"] = self.ep_ret[done_ids].clone()
       info["done_ep_len"] = self.ep_len[done_ids].clone()
       info["done_terminated"] = hard[done_ids].clone()
@@ -392,6 +405,32 @@ class TrackingSimEnv:
     self._finish_resets(done_ids)
     info["done"] = done
     return s_next, info
+
+  def _update_bins_traversed(self, ids):
+    """Updates G_b of every bin the finished episodes entered, with the discounted return-to-go
+    from the entry step divided by the largest return attainable from there (to the clip end or
+    the episode time limit). A terminated episode earns 0 after the fall."""
+    k, T, g, dev = len(ids), self.max_ep_len, self.gamma, self.device
+    L = self.ep_len[ids]
+    start = self.frame[ids] - L
+    t = torch.arange(T, device=dev)
+    valid = t[None] < L[:, None]
+    pw = g ** t.float()
+    r = self.rew_hist[ids] * valid
+    rtg = torch.flip(torch.cumsum(torch.flip(r * pw, [1]), 1), [1]) / pw
+    last = self.lib.ends[self.lib.clip_of_frame[start]] - 1
+    frames = torch.minimum(start[:, None] + t[None], last[:, None])
+    rem = torch.minimum(self.lib.remaining(frames), (T - t)[None].expand(k, -1))
+    potential = self.tcfg.max_step_reward * (1 - g ** rem.float()) / (1 - g)
+    ratio = (rtg / potential.clamp_min(1e-6)).clamp(0, 1)
+    b = self.lib.bin_of_frame[frames]
+    entered = torch.cat([torch.ones(k, 1, dtype=torch.bool, device=dev), b[:, 1:] != b[:, :-1]], dim=1)
+    # Entries with less than 0.5 s left give too short a return to judge the bin by.
+    sel = valid & entered & (rem >= 25)
+    bi, ri = b[sel], ratio[sel]
+    a = self.cfg.bin_ema
+    self.bin_G[bi] = torch.where(self.bin_visits[bi] > 0, (1 - a) * self.bin_G[bi] + a * ri, ri)
+    self.bin_visits[bi] += 1
 
   def _max_disc_return(self, ids):
     """Largest discounted return an episode from its start frame could have earned."""
