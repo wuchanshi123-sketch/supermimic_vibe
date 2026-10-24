@@ -59,6 +59,9 @@ class TrainCfg:
   # before 2026-10-23; "traversed" follows the paper's wording).
   reset_stat: str = "start"
   rtg_min_steps: int = 1
+  # Not in the paper (0 = paper): EMA rate of a slow target critic used for the lambda-return
+  # targets and for the bootstrap value V(x_H) in the policy objective.
+  critic_ema: float = 0.0
   use_critic: bool = True
   # Bookkeeping.
   log_every: int = 100
@@ -148,6 +151,13 @@ class Trainer:
         for t in list(mod.parameters()) + list(mod.buffers()):
           dist.broadcast(t.data, 0)
       torch.manual_seed(cfg.seed + 1000 * self.rank)
+    self.critic_tgt = None
+    if cfg.critic_ema > 0:
+      import copy
+
+      self.critic_tgt = copy.deepcopy(self.critic)
+      for p in self.critic_tgt.parameters():
+        p.requires_grad_(False)
     self.buf = self._make_buffer()
     self._wm_loss = torch.compile(self.wm_window_loss, dynamic=False) if cfg.compile_wm else self.wm_window_loss
     self.it = 0
@@ -208,6 +218,7 @@ class Trainer:
         "wm": self.wm.state_dict(),
         "policy": self.policy.state_dict(),
         "critic": self.critic.state_dict(),
+        **({"critic_tgt": self.critic_tgt.state_dict()} if self.critic_tgt is not None else {}),
         "opt_wm": self.opt_wm.state_dict(),
         "opt_pi": self.opt_pi.state_dict(),
         "opt_v": self.opt_v.state_dict(),
@@ -225,6 +236,8 @@ class Trainer:
     self.wm.load_state_dict(ck["wm"])
     self.policy.load_state_dict(ck["policy"])
     self.critic.load_state_dict(ck["critic"])
+    if self.critic_tgt is not None:
+      self.critic_tgt.load_state_dict(ck.get("critic_tgt", ck["critic"]))
     self.opt_wm.load_state_dict(ck["opt_wm"])
     self.opt_pi.load_state_dict(ck["opt_pi"])
     self.opt_v.load_state_dict(ck["opt_v"])
@@ -372,7 +385,7 @@ class Trainer:
       s, a_prev = s1, a
     xH = self.critic_input(an["feats"], an["goal"], xi, rem_all[:, H])
     if cfg.use_critic:
-      vH = self.critic(xH) * valid[:, H]
+      vH = (self.critic_tgt or self.critic)(xH) * valid[:, H]
       J = J + (cfg.gamma**H) * c * vH
     loss_pi = -J.mean() / H
     self.opt_pi.zero_grad(set_to_none=True)
@@ -397,7 +410,7 @@ class Trainer:
     X = torch.stack(rec["x"] + [xH], dim=1)  # (B, H+1, D)
     self.critic.norm.update(X)
     with torch.no_grad():
-      V = self.critic(X) * valid
+      V = (self.critic_tgt or self.critic)(X) * valid
       R = torch.zeros_like(V)
       R[:, H] = V[:, H]
       for t in range(H - 1, -1, -1):
@@ -422,6 +435,13 @@ class Trainer:
         torch.nn.utils.clip_grad_norm_(self.critic.net.parameters(), 1.0)
         self.opt_v.step()
         tot += loss.item()
+    if self.critic_tgt is not None:
+      with torch.no_grad():
+        a = cfg.critic_ema
+        for pt, po in zip(self.critic_tgt.net.parameters(), self.critic.net.parameters()):
+          pt.lerp_(po, a)
+        for bt, bo in zip(self.critic_tgt.buffers(), self.critic.buffers()):
+          bt.copy_(bo)
     return {"v_loss": tot / (cfg.critic_epochs * cfg.critic_minibatches), "v_mean": V[:, 0].mean().item()}
 
   # Main loop.

@@ -27484,5 +27484,17 @@
 "wm_error_1step": 0.04252,
 "wm_error_8step": 0.19751,
 "imagined_steps": 5242880000
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 101000,
+"hours": 11.1482,
+"train_return": 0.5495,
+"episode_steps": 149.3,
+"fell_share": 0.0483,
+"wm_error_1step": 0.0423,
+"wm_error_8step": 0.20165,
+"imagined_steps": 5295308800
 }
 ]

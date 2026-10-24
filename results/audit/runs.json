@@ -212,10 +212,10 @@
 "run": "bones_fix_detfrac25",
 "label": "Fix test: 25% of envs collect without action noise (not in paper)",
 "figure": "Fig. 2a (diagnosis)",
-"slurm_job": "31968703 (resumes 31953913 to 24 h)",
-"status": "running",
-"iterations": 188000,
-"train_hours": 15.265,
+"slurm_job": "31968703 (resumed 31953913; stopped at 15.3 h)",
+"status": "stopped",
+"iterations": 188300,
+"train_hours": 15.29,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -268,9 +268,9 @@
 "label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
 "figure": "Fig. 2a",
 "slurm_job": "31964356",
-"status": "running",
-"iterations": 100800,
-"train_hours": 11.131,
+"status": "stopped",
+"iterations": 101100,
+"train_hours": 11.157,
 "log": "runs/smimic_bones_2gpu_detfrac/log.jsonl",
 "evals": "runs/smimic_bones_2gpu_detfrac/eval.jsonl"
 },
@@ -284,5 +284,16 @@
 "train_hours": 0,
 "log": "runs/bones_fix_detfrac50/log.jsonl",
 "evals": "runs/bones_fix_detfrac50/eval.jsonl"
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic (not in paper)",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31970512",
+"status": "running",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/bones_fix_detfrac_ema/log.jsonl",
+"evals": "runs/bones_fix_detfrac_ema/eval.jsonl"
 }
 ]

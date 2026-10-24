@@ -606,3 +606,20 @@ Both late checkpoints score higher with action noise than deterministically, the
 coverage is the same drift, delayed by det-frac 0.25. Next test: det-frac 0.5 (job 31970504,
 runs/bones_fix_detfrac50, 16 h). The detfrac + traversed run finished (12 h); every 4th checkpoint is being
 scored on the full benchmark (job 31970505).
+
+## The late collapse comes with critic divergence — 2026-10-24 08:10Z
+
+det-frac 0.25's 8,192-clip benchmark then fell quickly: 0.894 @ 172k, 0.876 @ 180k, 0.863 @ 184k, 0.723
+(35 failed) @ 188k; the 2-GPU det-frac run 0.867 @ 100k. Its training log around the collapse: the critic
+loss rises from ~0.10 (120k) to 0.15 (171k), 0.25 (178k), 0.30 (185k) and 1.41 (188k); the imagined return J
+jumps from 7.0 to 8.2 (the largest attainable is ~10, a good policy sits at ~7); the policy gradient norm
+grows 0.03 -> 0.21 and the imagined action-rate penalty doubles (-0.05 -> -0.11), i.e. the action chatter
+seen in the simulator. The critic loss also crept up during the decline of every earlier run (faithful
+1-GPU 0.09 -> 0.23, faithful 2-GPU 0.084 -> 0.15). So the common driver is critic overestimation exploited
+by the policy through V(x_H); det-frac only slows it, and the deterministic drift is its early symptom.
+
+Added --critic-ema (train.py, default 0 = paper): an EMA copy of the critic (rate per update) gives the
+lambda-return targets and the bootstrap V(x_H) in the policy objective. Test run runs/bones_fix_detfrac_ema
+(job 31970512: det-frac 0.25 + critic EMA 0.01, 16 h). det-frac 0.25 (job 31968703, at 15.3 h) and the
+2-GPU det-frac run (job 31964356, at 10.0 h) were stopped after showing the collapse; det-frac 0.5 (job
+31970504) continues as the comparison.
