@@ -542,3 +542,16 @@ node301 and run at 0.59 / 0.48 s per iteration instead of ~0.29 / 0.33.
   learns them. 5,033 clips have return < 0.8, 28,340 < 0.9.
 - det-frac resumed from its 10 h checkpoint to a 24 h budget (job 31967618), to see whether it keeps
   improving like the paper's curve (0.96 at ~9 H100-h, ~25 A6000-h).
+
+## Check-in 2026-10-24 01:20Z
+
+- The 24 h extension of detfrac25 (job 31967618) failed at its first update: a resumed run started
+  updating with an empty replay buffer (the buffer is not checkpointed and the warm-up collection only
+  ran at iteration 0). Fixed in train.py (warm-up also when the buffer holds fewer than warmup_steps);
+  resubmitted as job 31968703. This would also have affected any automatic resume after preemption
+  (none of the earlier runs resumed mid-run).
+- detfrac + traversed @ 71k iterations (7.2 h): 8,192-clip benchmark 0.918 (38 failed) @ 60k, 0.910-0.912
+  since; det-frac alone at the same iterations: 0.912 @ 60k (log-matched), so still no gain from the
+  traversed sampler.
+- 2-GPU det-frac @ 49k iterations (5.6 h, 0.31 s/it now): 0.909-0.912 from 32k to 48k (37-65 failed);
+  coverage 0.80.

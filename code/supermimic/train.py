@@ -428,7 +428,8 @@ class Trainer:
 
   def run(self):
     cfg = self.cfg
-    if self.it == 0:
+    # The replay buffer is not checkpointed, so a resumed run refills it first as well.
+    if self.it == 0 or self.buf.size < cfg.warmup_steps:
       for _ in range(cfg.warmup_steps):
         self.collect()
     t_last = time.time()
