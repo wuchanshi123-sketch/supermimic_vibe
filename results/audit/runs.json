@@ -280,8 +280,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31970504",
 "status": "running",
-"iterations": 20000,
-"train_hours": 1.668,
+"iterations": 46300,
+"train_hours": 3.722,
 "log": "runs/bones_fix_detfrac50/log.jsonl",
 "evals": "runs/bones_fix_detfrac50/eval.jsonl"
 },
@@ -291,8 +291,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31971049",
 "status": "running",
-"iterations": 0,
-"train_hours": 0,
+"iterations": 24300,
+"train_hours": 2.013,
 "log": "runs/bones_fix_detfrac_ema/log.jsonl",
 "evals": "runs/bones_fix_detfrac_ema/eval.jsonl"
 }

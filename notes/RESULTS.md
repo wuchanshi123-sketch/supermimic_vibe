@@ -641,3 +641,13 @@ directory was removed.
 
 det-frac 0.5 @ 20k iterations: 0.865 (124 of 8,192 failed) @ 16k, training healthy (falls 0.8%, critic
 loss 0.079, J 6.51 — same as det-frac 0.25 at 16k).
+
+## Check-in 2026-10-24 12:35Z
+
+- det-frac 0.5 @ 46k iterations (3.7 h): 8,192-clip benchmark tracks det-frac 0.25 at matched iterations
+  (0.892 vs 0.888 @ 24k, 0.897 vs 0.895 @ 32k, 0.906 vs 0.908 @ 44k); critic loss 0.079-0.087, J 6.2-6.75,
+  falls 0.5-1.7%, the same as det-frac 0.25.
+- det-frac 0.25 + critic EMA (lambda-return targets only) @ 24k (2.0 h): trains normally after a slower
+  start (0.744 vs 0.814 @ 8k; 0.865 vs 0.868 @ 16k with 74 vs 108 failed; 0.890 vs 0.888 @ 24k); critic loss
+  0.177 -> 0.096 (lagged targets), J 5.8 -> 6.8, falls 0.4-1.1%.
+- Both still need to pass ~170k iterations (~11-13 more hours), where det-frac 0.25's critic diverged.
