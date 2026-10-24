@@ -214,8 +214,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31968703 (resumes 31953913 to 24 h)",
 "status": "running",
-"iterations": 175900,
-"train_hours": 14.262,
+"iterations": 188000,
+"train_hours": 15.265,
 "log": "runs/bones_fix_detfrac25/log.jsonl",
 "evals": "runs/bones_fix_detfrac25/eval.jsonl"
 },
@@ -257,9 +257,9 @@
 "label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31963725",
-"status": "running",
-"iterations": 116800,
-"train_hours": 11.508,
+"status": "finished",
+"iterations": 122800,
+"train_hours": 11.997,
 "log": "runs/bones_fix_detfrac_traversed/log.jsonl",
 "evals": "runs/bones_fix_detfrac_traversed/eval.jsonl"
 },
@@ -269,9 +269,20 @@
 "figure": "Fig. 2a",
 "slurm_job": "31964356",
 "status": "running",
-"iterations": 88200,
-"train_hours": 10.039,
+"iterations": 100800,
+"train_hours": 11.131,
 "log": "runs/smimic_bones_2gpu_detfrac/log.jsonl",
 "evals": "runs/smimic_bones_2gpu_detfrac/eval.jsonl"
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"figure": "Fig. 2a (diagnosis)",
+"slurm_job": "31970504",
+"status": "running",
+"iterations": 0,
+"train_hours": 0,
+"log": "runs/bones_fix_detfrac50/log.jsonl",
+"evals": "runs/bones_fix_detfrac50/eval.jsonl"
 }
 ]

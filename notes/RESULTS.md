@@ -591,3 +591,18 @@ learned the acrobatic clips yet (19-22 of 27 fail @ 64-88k). Job 31970247 checks
 the deterministic drift again (eval_conditions on det-frac @ 172k and 2-GPU det-frac @ 88k).
 
 detfrac + traversed @ 11.5 h: 0.912-0.918 with 28-43 failed since 80k (no gain over det-frac alone).
+
+## Check-in 2026-10-24 08:00Z: det-frac 0.25 delays the deterministic drift but does not stop it
+
+eval_conditions (4,096 clips):
+
+| checkpoint | deterministic | obs noise | action noise 0.1 | DR | all |
+| --- | --- | --- | --- | --- | --- |
+| det-frac 0.25 @ 172k (13.8 h) | 0.893 (3) | 0.902 (2) | 0.909 (2) | 0.890 (7) | 0.901 (7) |
+| 2-GPU det-frac 0.25 @ 88k (10 h) | 0.889 (15) | 0.899 (16) | 0.909 (14) | 0.887 (18) | 0.900 (18) |
+
+Both late checkpoints score higher with action noise than deterministically, the signature of the drift
+(at 104k det-frac 0.25 scored 0.913 deterministic vs 0.911 noisy). So the slow return slide after full
+coverage is the same drift, delayed by det-frac 0.25. Next test: det-frac 0.5 (job 31970504,
+runs/bones_fix_detfrac50, 16 h). The detfrac + traversed run finished (12 h); every 4th checkpoint is being
+scored on the full benchmark (job 31970505).

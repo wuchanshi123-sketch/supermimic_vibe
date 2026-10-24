@@ -41,6 +41,7 @@ RUNS = {
   "bones_fix_traversed_all": ("Fix test: reset sampler updates every traversed bin (paper's wording)", "Fig. 2a (diagnosis)", "31960983"),
   "bones_fix_detfrac_traversed": ("Fix test: det-frac 0.25 + every-traversed-bin sampler", "Fig. 2a (diagnosis)", "31963725"),
   "smimic_bones_2gpu_detfrac": ("SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)", "Fig. 2a", "31964356"),
+  "bones_fix_detfrac50": ("Fix test: 50% of envs collect without action noise (not in paper)", "Fig. 2a (diagnosis)", "31970504"),
 }
 
 # Paper Fig. 3a (LAFAN1, 40 clips): normalized return vs wall-clock hours.
