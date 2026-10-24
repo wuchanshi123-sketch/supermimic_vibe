@@ -570,3 +570,24 @@ job submitted (eval_full.jsonl).
 
 detfrac + traversed @ 94k (9.4 h): 0.917-0.919 since 76k with 32-43 failed (det-frac alone at the same
 iterations: 21-28 failed) — no gain. 2-GPU det-frac @ 69k (7.9 h): 0.904-0.915, 32-38 failed.
+
+## Check-in 2026-10-24 06:40Z: det-frac failures far below SONIC; a slow return decline
+
+det-frac (1 A6000) on the full 128,904-clip benchmark (eval_full.jsonl):
+
+| checkpoint | hours | return | failed |
+| --- | --- | --- | --- |
+| 124k | 9.85 | 0.909 | 345 |
+| 128k | 10.27 | 0.916 | 270 |
+| 144k | 11.61 | 0.914 | 162 |
+| 152k | 12.27 | 0.908 | 132 |
+
+So failed clips fall from 623 @ 3.9 h to 132 @ 12.3 h (SONIC in our simulator 642; paper 25 @ 3 H100-h)
+while the return stays at 0.908-0.917 (paper 0.94-0.96). On the 8,192-clip subset, acrobatic failures are
+1-2 of 27 from 152k to 168k (handstands and flips learned), 7 @ 172k (flips fluctuate), and the subset
+return slides from 0.914 @ 144k to 0.894 @ 172k (failed 3-7). The 2-GPU det-frac run shows the same slide
+after reaching full coverage (0.915 @ 68k -> 0.889 @ 88k; train return 0.57, WM error 0.26) and has not
+learned the acrobatic clips yet (19-22 of 27 fail @ 64-88k). Job 31970247 checks whether this slide is
+the deterministic drift again (eval_conditions on det-frac @ 172k and 2-GPU det-frac @ 88k).
+
+detfrac + traversed @ 11.5 h: 0.912-0.918 with 28-43 failed since 80k (no gain over det-frac alone).
