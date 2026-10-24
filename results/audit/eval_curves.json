@@ -3996,6 +3996,42 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 4000,
+"hours": 0.416,
+"norm_return": 0.6199,
+"failed": 269,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 8000,
+"hours": 0.7292,
+"norm_return": 0.8064,
+"failed": 138,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 12000,
+"hours": 1.0426,
+"norm_return": 0.8515,
+"failed": 120,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 16000,
+"hours": 1.3559,
+"norm_return": 0.8646,
+"failed": 124,
+"clips": 8192
+},
+{
 "run": "bones_fix_detfrac25_full",
 "label": "Fix test: 25% of envs collect without action noise (not in paper) (full benchmark)",
 "iteration": 16000,
@@ -4092,6 +4128,78 @@
 "hours": 12.2728,
 "norm_return": 0.9081,
 "failed": 132,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 16000,
+"hours": 1.4091,
+"norm_return": 0.8684,
+"failed": 1113,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 32000,
+"hours": 2.7244,
+"norm_return": 0.9047,
+"failed": 655,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 48000,
+"hours": 4.9482,
+"norm_return": 0.9072,
+"failed": 627,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 64000,
+"hours": 6.4939,
+"norm_return": 0.9124,
+"failed": 635,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 80000,
+"hours": 8.0235,
+"norm_return": 0.9175,
+"failed": 555,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 96000,
+"hours": 9.5498,
+"norm_return": 0.9177,
+"failed": 522,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 112000,
+"hours": 11.1158,
+"norm_return": 0.9117,
+"failed": 530,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac_traversed_full",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler (full benchmark)",
+"iteration": 120000,
+"hours": 11.7696,
+"norm_return": 0.9082,
+"failed": 458,
 "clips": 128904
 }
 ]

@@ -59,9 +59,11 @@ class TrainCfg:
   # before 2026-10-23; "traversed" follows the paper's wording).
   reset_stat: str = "start"
   rtg_min_steps: int = 1
-  # Not in the paper (0 = paper): EMA rate of a slow target critic used for the lambda-return
-  # targets and for the bootstrap value V(x_H) in the policy objective.
+  # Not in the paper (0 = paper): EMA rate of a slow target critic that gives the critic's
+  # lambda-return targets; with critic_ema_policy it also gives the bootstrap V(x_H) of the
+  # policy objective (a near-random target early on misleads the policy, so off by default).
   critic_ema: float = 0.0
+  critic_ema_policy: bool = False
   use_critic: bool = True
   # Bookkeeping.
   log_every: int = 100
@@ -385,7 +387,7 @@ class Trainer:
       s, a_prev = s1, a
     xH = self.critic_input(an["feats"], an["goal"], xi, rem_all[:, H])
     if cfg.use_critic:
-      vH = (self.critic_tgt or self.critic)(xH) * valid[:, H]
+      vH = (self.critic_tgt if cfg.critic_ema_policy and self.critic_tgt is not None else self.critic)(xH) * valid[:, H]
       J = J + (cfg.gamma**H) * c * vH
     loss_pi = -J.mean() / H
     self.opt_pi.zero_grad(set_to_none=True)
@@ -410,7 +412,7 @@ class Trainer:
     X = torch.stack(rec["x"] + [xH], dim=1)  # (B, H+1, D)
     self.critic.norm.update(X)
     with torch.no_grad():
-      V = (self.critic_tgt or self.critic)(X) * valid
+      V = (self.critic_tgt if self.critic_tgt is not None else self.critic)(X) * valid
       R = torch.zeros_like(V)
       R[:, H] = V[:, H]
       for t in range(H - 1, -1, -1):

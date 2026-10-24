@@ -623,3 +623,21 @@ lambda-return targets and the bootstrap V(x_H) in the policy objective. Test run
 (job 31970512: det-frac 0.25 + critic EMA 0.01, 16 h). det-frac 0.25 (job 31968703, at 15.3 h) and the
 2-GPU det-frac run (job 31964356, at 10.0 h) were stopped after showing the collapse; det-frac 0.5 (job
 31970504) continues as the comparison.
+
+## Check-in 2026-10-24 10:05Z
+
+detfrac + traversed (12 h, finished) on the full 128,904-clip benchmark: 0.868 (1,113 failed) @ 1.41 h,
+0.905 (655) @ 2.72 h, 0.907 (627) @ 4.95 h, 0.912 (635) @ 6.49 h, 0.918 (555) @ 8.02 h, 0.918 (522) @ 9.55 h,
+0.912 (530) @ 11.12 h, 0.908 (458) @ 11.77 h. Beats SONIC (0.893, 642) from 2.72 h on, but has more failed
+clips than det-frac alone at matched time (det-frac 0.25: 537 @ 6.36 h, 413 @ 7.62 h, 345 @ 9.85 h).
+
+The first target-critic run (job 31970512) failed from the start: training falls 72% @ 8k iterations,
+critic loss 12 @ 8k and 388 @ 16k, imagined return 14 -> 109, benchmark -0.09 -> -2.8 with ~7,700 of 8,192
+failed. The target critic, a near-random network early on that moves 1% per update, also gave the
+bootstrap V(x_H) of the policy objective, so the policy optimised toward arbitrary target values. Rewired
+(train.py --critic-ema now only sets the critic's lambda-return targets; --critic-ema-policy additionally
+uses it for V(x_H)) and restarted as job 31971049 (det-frac 0.25 + critic EMA 0.01, 16 h); the broken run's
+directory was removed.
+
+det-frac 0.5 @ 20k iterations: 0.865 (124 of 8,192 failed) @ 16k, training healthy (falls 0.8%, critic
+loss 0.079, J 6.51 — same as det-frac 0.25 at 16k).
