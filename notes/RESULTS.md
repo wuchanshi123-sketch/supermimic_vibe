@@ -661,3 +661,14 @@ loss 0.079, J 6.51 — same as det-frac 0.25 at 16k).
   [0.908/52] @ 44k, 0.920/39 [0.903/49] @ 52k — slightly ahead; critic loss 0.092-0.096, J 6.83-6.89.
 - Acrobatic clips (27 in the subset): 22-26 still fail in both, as in det-frac 0.25 at these iterations
   (it learned them after ~125k).
+
+## Check-in 2026-10-24 18:45Z
+
+8,192-clip benchmark (det-frac 0.25 at the same iterations in brackets):
+- det-frac 0.5 @ 109k (8.6 h): 0.920/35 [0.915/28] @ 84k, 0.923/31 [0.914/28] @ 88k, 0.921/30 [0.916/24] @ 92k,
+  0.920/27 [0.915/26] @ 100k, 0.915/21 [0.917/22] @ 108k; acrobatic failures 20 -> 17 of 27 (96k -> 108k).
+- det-frac 0.25 + critic EMA @ 87k (6.9 h): 0.922/34 [0.914/44] @ 60k, 0.920/32 [0.908/34] @ 76k, 0.915/27
+  [0.915/28] @ 84k; acrobatic failures 22-27 of 27.
+- Both reached full bin coverage; their training return dropped to ~0.6 with falls ~6% as the sampler
+  concentrated (same as det-frac 0.25), critic loss 0.089-0.097, J 6.73-6.94 — no sign of divergence yet
+  (det-frac 0.25 diverged after ~170k).
