@@ -672,3 +672,14 @@ loss 0.079, J 6.51 — same as det-frac 0.25 at 16k).
 - Both reached full bin coverage; their training return dropped to ~0.6 with falls ~6% as the sampler
   concentrated (same as det-frac 0.25), critic loss 0.089-0.097, J 6.73-6.94 — no sign of divergence yet
   (det-frac 0.25 diverged after ~170k).
+
+## Check-in 2026-10-24 21:50Z: det-frac 0.5 pulls ahead
+
+8,192-clip benchmark (det-frac 0.25 at the same iterations in brackets):
+- det-frac 0.5 @ 141k (11.1 h): 0.922/20 [0.911/22] @ 116k, 0.924/17 [0.909/21] @ 124k, 0.926/16 [0.907/15]
+  @ 132k, 0.924/13 [0.906/11] @ 136k, 0.922/6 [0.905/14] @ 140k; acrobatic failures 15 -> 4 of 27 from 124k to
+  140k; critic loss 0.096 (det-frac 0.25: 0.113 and rising at 140k), J 6.82.
+- det-frac 0.25 + critic EMA @ 118k (9.4 h): 0.905-0.916 from 100k to 116k with 20-30 failed — level with or
+  slightly behind det-frac 0.25; critic loss creeping up (0.105 -> 0.115), so the target critic does not
+  remove the trend.
+Both have yet to pass det-frac 0.25's collapse point (170-188k).

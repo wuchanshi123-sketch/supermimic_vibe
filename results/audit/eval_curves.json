@@ -4239,6 +4239,78 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 112000,
+"hours": 8.8288,
+"norm_return": 0.9201,
+"failed": 23,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 116000,
+"hours": 9.1406,
+"norm_return": 0.9221,
+"failed": 20,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 120000,
+"hours": 9.452,
+"norm_return": 0.9243,
+"failed": 25,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 124000,
+"hours": 9.7634,
+"norm_return": 0.9245,
+"failed": 17,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 128000,
+"hours": 10.0748,
+"norm_return": 0.924,
+"failed": 16,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 132000,
+"hours": 10.3861,
+"norm_return": 0.9264,
+"failed": 16,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 136000,
+"hours": 10.6973,
+"norm_return": 0.9237,
+"failed": 13,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 140000,
+"hours": 11.0086,
+"norm_return": 0.9217,
+"failed": 6,
+"clips": 8192
+},
+{
 "run": "bones_fix_detfrac_ema",
 "label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
 "iteration": 4000,
@@ -4425,6 +4497,78 @@
 "hours": 6.6836,
 "norm_return": 0.9154,
 "failed": 27,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 88000,
+"hours": 6.9967,
+"norm_return": 0.9112,
+"failed": 25,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 92000,
+"hours": 7.3102,
+"norm_return": 0.9164,
+"failed": 24,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 96000,
+"hours": 7.6237,
+"norm_return": 0.914,
+"failed": 28,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 100000,
+"hours": 7.9373,
+"norm_return": 0.9146,
+"failed": 20,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 104000,
+"hours": 8.2507,
+"norm_return": 0.9049,
+"failed": 30,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 108000,
+"hours": 8.5643,
+"norm_return": 0.9123,
+"failed": 28,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 112000,
+"hours": 8.8778,
+"norm_return": 0.9074,
+"failed": 21,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_ema",
+"label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
+"iteration": 116000,
+"hours": 9.1913,
+"norm_return": 0.9054,
+"failed": 24,
 "clips": 8192
 },
 {
