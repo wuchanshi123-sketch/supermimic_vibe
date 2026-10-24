@@ -555,3 +555,18 @@ node301 and run at 0.59 / 0.48 s per iteration instead of ~0.29 / 0.33.
   traversed sampler.
 - 2-GPU det-frac @ 49k iterations (5.6 h, 0.31 s/it now): 0.909-0.912 from 32k to 48k (37-65 failed);
   coverage 0.80.
+
+## det-frac learns the acrobatic clips with longer training — 2026-10-24 04:10Z
+
+runs/bones_fix_detfrac25 resumed at 10 h (job 31968703) is at 12.2 h / 150.8k iterations. Its 8,192-clip
+benchmark return stays at 0.905-0.916, but failed clips fall from 21 (10 h) to 15, 11, 9 and 7 @ 148k.
+code/scripts/dev/subset_failures.py: the subset holds 27 acrobatic clips (handstand, flip, safety roll,
+monkey, tiger, cartwheel, inchworm); failed acrobatic clips per checkpoint: 22 @ 84k, 18 @ 96k, 17 @ 125.9k,
+14 @ 128k, 12 @ 132k, 9 @ 136k, 8 @ 140k, 6 @ 144k, 3 @ 148k (handstands 6 -> 0, flips 5 -> 2). So the
+policy keeps acquiring the hardest motions, as the paper's does; 7 of 8,192 failed corresponds to ~110 of
+128,904 (paper: 25). The drop started right after the resume, which also refilled the replay buffer from
+scratch, so a buffer-reset effect cannot be excluded. Full-benchmark scores of the newest checkpoints:
+job submitted (eval_full.jsonl).
+
+detfrac + traversed @ 94k (9.4 h): 0.917-0.919 since 76k with 32-43 failed (det-frac alone at the same
+iterations: 21-28 failed) — no gain. 2-GPU det-frac @ 69k (7.9 h): 0.904-0.915, 32-38 failed.

@@ -2754,6 +2754,60 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 128000,
+"hours": 10.2744,
+"norm_return": 0.9159,
+"failed": 15,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 132000,
+"hours": 10.6075,
+"norm_return": 0.907,
+"failed": 15,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 136000,
+"hours": 10.9406,
+"norm_return": 0.9058,
+"failed": 11,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 140000,
+"hours": 11.2732,
+"norm_return": 0.905,
+"failed": 14,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 144000,
+"hours": 11.6059,
+"norm_return": 0.914,
+"failed": 9,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac25",
+"label": "Fix test: 25% of envs collect without action noise (not in paper)",
+"iteration": 148000,
+"hours": 11.9389,
+"norm_return": 0.9068,
+"failed": 7,
+"clips": 8192
+},
+{
 "run": "bones_fix_fp32",
 "label": "Fix test: fp32 networks instead of bf16 (paper: TF32)",
 "iteration": 4000,
@@ -3456,6 +3510,105 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 52000,
+"hours": 5.2848,
+"norm_return": 0.9118,
+"failed": 37,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 56000,
+"hours": 5.6814,
+"norm_return": 0.9149,
+"failed": 35,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 60000,
+"hours": 6.0876,
+"norm_return": 0.9182,
+"failed": 38,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 64000,
+"hours": 6.4939,
+"norm_return": 0.9119,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 68000,
+"hours": 6.8986,
+"norm_return": 0.9096,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 72000,
+"hours": 7.2249,
+"norm_return": 0.914,
+"failed": 33,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 76000,
+"hours": 7.6231,
+"norm_return": 0.9186,
+"failed": 33,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 80000,
+"hours": 8.0235,
+"norm_return": 0.9168,
+"failed": 36,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 84000,
+"hours": 8.4161,
+"norm_return": 0.918,
+"failed": 43,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 88000,
+"hours": 8.8097,
+"norm_return": 0.9165,
+"failed": 33,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac_traversed",
+"label": "Fix test: det-frac 0.25 + every-traversed-bin sampler",
+"iteration": 92000,
+"hours": 9.1897,
+"norm_return": 0.9185,
+"failed": 32,
+"clips": 8192
+},
+{
 "run": "smimic_bones_2gpu_detfrac",
 "label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
 "iteration": 4000,
@@ -3516,6 +3669,96 @@
 "hours": 3.116,
 "norm_return": 0.908,
 "failed": 41,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 32000,
+"hours": 3.559,
+"norm_return": 0.9087,
+"failed": 42,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 36000,
+"hours": 3.9858,
+"norm_return": 0.9112,
+"failed": 37,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 40000,
+"hours": 4.4901,
+"norm_return": 0.907,
+"failed": 65,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 44000,
+"hours": 4.9976,
+"norm_return": 0.9117,
+"failed": 39,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 48000,
+"hours": 5.4675,
+"norm_return": 0.9098,
+"failed": 40,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 52000,
+"hours": 5.8438,
+"norm_return": 0.9053,
+"failed": 32,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 56000,
+"hours": 6.3418,
+"norm_return": 0.9106,
+"failed": 32,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 60000,
+"hours": 6.8399,
+"norm_return": 0.9041,
+"failed": 38,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 64000,
+"hours": 7.3391,
+"norm_return": 0.9041,
+"failed": 36,
+"clips": 8192
+},
+{
+"run": "smimic_bones_2gpu_detfrac",
+"label": "SuperMimic, BONES-SEED, 2 GPUs, det-frac 0.25 (not in paper)",
+"iteration": 68000,
+"hours": 7.7637,
+"norm_return": 0.9155,
+"failed": 34,
 "clips": 8192
 },
 {
