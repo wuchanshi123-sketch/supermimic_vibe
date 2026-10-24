@@ -651,3 +651,13 @@ loss 0.079, J 6.51 — same as det-frac 0.25 at 16k).
   start (0.744 vs 0.814 @ 8k; 0.865 vs 0.868 @ 16k with 74 vs 108 failed; 0.890 vs 0.888 @ 24k); critic loss
   0.177 -> 0.096 (lagged targets), J 5.8 -> 6.8, falls 0.4-1.1%.
 - Both still need to pass ~170k iterations (~11-13 more hours), where det-frac 0.25's critic diverged.
+
+## Check-in 2026-10-24 15:40Z
+
+8,192-clip benchmark (det-frac 0.25 at the same iterations in brackets):
+- det-frac 0.5 @ 77k (6.1 h, full coverage reached): 0.912/50 [0.908/41] @ 48k, 0.912/35 [0.914/44] @ 60k,
+  0.915/44 [0.913/42] @ 68k, 0.918/32 [0.908/34] @ 76k; critic loss 0.082-0.084, J 6.74-6.79 (same as 0.25).
+- det-frac 0.25 + critic EMA @ 56k (4.5 h): 0.904/51 [0.895/76] @ 32k, 0.911/47 [0.904/51] @ 40k, 0.915/38
+  [0.908/52] @ 44k, 0.920/39 [0.903/49] @ 52k — slightly ahead; critic loss 0.092-0.096, J 6.83-6.89.
+- Acrobatic clips (27 in the subset): 22-26 still fail in both, as in det-frac 0.25 at these iterations
+  (it learned them after ~125k).
