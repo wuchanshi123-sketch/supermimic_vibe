@@ -221,9 +221,10 @@ def claims(data):
   sonic = _load("sonic_bones_gains.json")
   sonic_full = _load("sonic_bones_full.json")
   b1, b2 = ev.get("smimic_bones_1gpu", []), ev.get("smimic_bones_2gpu", [])
-  # Best configuration (not in the paper): 25% of environments collect without action noise;
-  # scored on the full benchmark.
-  bdf = ev.get("bones_fix_detfrac25_full", [])
+  # Fixed configurations (not in the paper): 25% or 50% of environments collect without action
+  # noise; scored on the full benchmark. bdf is the better one (50%: no critic collapse in 16 h).
+  bdf25 = ev.get("bones_fix_detfrac25_full", [])
+  bdf = ev.get("bones_fix_detfrac50_full", [])
 
   def filter_text():
     if not bfilter:
@@ -257,22 +258,28 @@ def claims(data):
       bb = max(b2, key=lambda r: r["norm_return"])
       parts.append(f"2 A6000s: best {bb['norm_return']:.3f} ({bb['failed']:,} failed) at {bb['hours']:.1f} h, then declined")
     text = "Faithful implementation: " + "; ".join(parts)
+    def fix_text(rows, frac, tail):
+      both = next((r for r in rows if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]), None)
+      bb = max(rows, key=lambda r: r["norm_return"])
+      fewest = min(rows, key=lambda r: r["failed"])
+      return (f"{frac}"
+              + (f"beats SONIC on return and failed clips from {both['hours']:.2f} h ({both['norm_return']:.3f}, {both['failed']:,} failed); " if both else "")
+              + f"best {bb['norm_return']:.3f} ({bb['failed']:,} failed) at {bb['hours']:.1f} h, fewest failed {fewest['failed']:,} "
+              f"({fewest['norm_return']:.3f}) at {fewest['hours']:.1f} h; {tail}")
     if bdf and sonic:
-      both = next((r for r in bdf if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]), None)
-      bb = max(bdf, key=lambda r: r["norm_return"])
-      fewest = min(bdf, key=lambda r: r["failed"])
-      text += (f". With our fix (25% of environments collect without action noise, not in the paper), 1 A6000: "
-               + (f"beats SONIC on return and failed clips from {both['hours']:.2f} h ({both['norm_return']:.3f}, {both['failed']:,} failed); " if both else "")
-               + f"best {bb['norm_return']:.3f} ({bb['failed']:,} failed) at {bb['hours']:.1f} h, fewest failed {fewest['failed']:,} at {fewest['hours']:.1f} h; "
-               "no decline in 10 h. Paper: 0.94 and 25 failed at 3 H100-h (~8 A6000-h)")
+      text += ". With our fix, " + fix_text(bdf, "50% of environments collect without action noise (not in the paper), 1 A6000: ", f"no critic collapse in {bdf[-1]['hours']:.0f} h of training; after ~13 h single checkpoints vary more (0.89-0.92)")
+    if bdf25 and sonic:
+      text += ". With 25% instead: " + fix_text(bdf25, "", "the critic diverged after ~14 h (180k iterations)")
+    if bdf or bdf25:
+      text += ". Paper: 0.94 and 25 failed at 3 H100-h (~8 A6000-h)"
     return text
 
   def bones_status():
     if not (b1 and sonic):
       return "In progress"
-    both = [r for r in b1 + bdf if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]]
+    both = [r for r in b1 + bdf + bdf25 if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]]
     # The paper's margin (0.94 and 25 failed vs SONIC's 179 at 3 h) is far larger than ours.
-    if any(r["norm_return"] >= 0.93 and r["failed"] <= 100 for r in b1 + bdf):
+    if any(r["norm_return"] >= 0.93 and r["failed"] <= 100 for r in b1 + bdf + bdf25):
       return "Reproduced"
     if both:
       return "Partly reproduced"
@@ -285,9 +292,15 @@ def claims(data):
     if not beat:
       return f"SuperMimic has not passed SONIC's {sonic['norm_return']:.3f} yet"
     out = f"{beat['hours']:.2f} A6000-h to pass SONIC's return in our simulator vs ~21,000 L40-h: {21000 / beat['hours']:,.0f}x"
-    both = next((r for r in bdf if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]), None)
-    if both:
-      out += f"; {both['hours']:.2f} A6000-h to beat it on both return and failed clips (with our action-noise fix): {21000 / both['hours']:,.0f}x"
+    firsts = []
+    for rows, frac in ((bdf25, "25%"), (bdf, "50%")):
+      r = next((r for r in rows if r["norm_return"] > sonic["norm_return"] and r["failed"] < sonic["failed"]), None)
+      if r:
+        firsts.append((r["hours"], frac))
+    if firsts:
+      h, frac = min(firsts)
+      out += (f"; {h:.2f} A6000-h to beat it on both return and failed clips (with our fix, {frac} of environments "
+              f"collecting without action noise): {21000 / h:,.0f}x")
     return out + " (SONIC scored in our simulator: 0.893, 642 failed; paper's own: 0.90, 179)"
 
   def sweep_text():
@@ -366,7 +379,7 @@ def main():
         "norm_return": round(d["norm_return"], 4), "failed": d["failed"], "clips": d["num_clips"],
       })
   for run, (label, _, _) in list(RUNS.items()):
-    for d in jsonl(os.path.join(ROOT, "runs", run, "eval_full.jsonl")):
+    for d in sorted(jsonl(os.path.join(ROOT, "runs", run, "eval_full.jsonl")), key=lambda d: d["it"]):
       ev_rows.append({
         "run": run + "_full", "label": label + " (full benchmark)", "iteration": d["it"], "hours": round(d["hours"], 4),
         "norm_return": round(d["norm_return"], 4), "failed": d["failed"], "clips": d["num_clips"],

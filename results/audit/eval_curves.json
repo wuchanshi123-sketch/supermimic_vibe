@@ -4966,5 +4966,167 @@
 "norm_return": 0.9082,
 "failed": 458,
 "clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 16000,
+"hours": 1.3559,
+"norm_return": 0.8661,
+"failed": 1798,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 32000,
+"hours": 2.6068,
+"norm_return": 0.8983,
+"failed": 738,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 48000,
+"hours": 3.8547,
+"norm_return": 0.913,
+"failed": 716,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 64000,
+"hours": 5.1006,
+"norm_return": 0.9158,
+"failed": 586,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 80000,
+"hours": 6.3414,
+"norm_return": 0.9157,
+"failed": 527,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 96000,
+"hours": 7.5832,
+"norm_return": 0.9185,
+"failed": 428,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 112000,
+"hours": 8.8288,
+"norm_return": 0.9207,
+"failed": 348,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 128000,
+"hours": 10.0748,
+"norm_return": 0.9238,
+"failed": 301,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 140000,
+"hours": 11.0086,
+"norm_return": 0.9218,
+"failed": 115,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 144000,
+"hours": 11.3198,
+"norm_return": 0.9224,
+"failed": 102,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 152000,
+"hours": 11.9423,
+"norm_return": 0.9238,
+"failed": 77,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 160000,
+"hours": 12.5651,
+"norm_return": 0.9221,
+"failed": 95,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 168000,
+"hours": 13.1882,
+"norm_return": 0.9231,
+"failed": 70,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 176000,
+"hours": 13.8104,
+"norm_return": 0.913,
+"failed": 68,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 184000,
+"hours": 14.4303,
+"norm_return": 0.9226,
+"failed": 45,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 192000,
+"hours": 15.0497,
+"norm_return": 0.8966,
+"failed": 52,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 196000,
+"hours": 15.3592,
+"norm_return": 0.9204,
+"failed": 48,
+"clips": 128904
+},
+{
+"run": "bones_fix_detfrac50_full",
+"label": "Fix test: 50% of envs collect without action noise (not in paper) (full benchmark)",
+"iteration": 204000,
+"hours": 15.9762,
+"norm_return": 0.8914,
+"failed": 68,
+"clips": 128904
 }
 ]

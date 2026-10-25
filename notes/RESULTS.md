@@ -758,3 +758,46 @@ Training statistics, det-frac 0.5 (mean over +-2k iterations; det-frac 0.25 in b
   faithful and det-frac 0.25 runs print it too (700-1,000 times). Each warning means a world that step had
   more constraint rows than allocated, so some contacts were dropped for that step. At about 1 world-step in
   10^7 it is negligible for training; not changed so runs stay comparable.
+
+## Check-in 2026-10-25 08:15Z: det-frac 0.5 on the full benchmark (BONES-SEED runs finished)
+
+Full benchmark (128,904 clips), return/failed. Every 4th checkpoint (job 31978709) plus the 8,192-subset
+best checkpoints 140k/152k/168k/184k/196k (job 31979316); det-frac 0.25 in brackets where scored:
+
+| it | h | det-frac 0.5 | [det-frac 0.25] |
+| --- | --- | --- | --- |
+| 16k | 1.4 | 0.866/1,798 | 0.869/1,570 |
+| 32k | 2.6 | 0.898/738 | 0.896/1,211 |
+| 48k | 3.9 | 0.913/716 | 0.909/623 |
+| 64k | 5.1 | 0.916/586 | 0.906/601 |
+| 80k | 6.3 | 0.916/527 | 0.910/537 |
+| 96k | 7.6 | 0.919/428 | 0.916/413 |
+| 112k | 8.8 | 0.921/348 | 0.917/416 |
+| 128k | 10.1 | 0.924/301 | 0.916/270 |
+| 140k | 11.0 | 0.922/115 | — |
+| 144k | 11.3 | 0.922/102 | 0.914/162 |
+| 152k | 11.9 | 0.924/77 | 0.908/132 |
+| 160k | 12.6 | 0.922/95 | — |
+| 168k | 13.2 | 0.923/70 | — |
+| 176k | 13.8 | 0.913/68 | — |
+| 184k | 14.4 | 0.923/45 | (collapsed) |
+| 192k | 15.1 | 0.897/52 | — |
+| 196k | 15.4 | 0.920/48 | — |
+| 204k | 16.0 | 0.891/68 | — |
+
+SONIC checkpoint in our simulator: 0.893/642.
+
+- det-frac 0.5 is the best configuration: from 64k on it is ahead of det-frac 0.25 on return at every
+  matched checkpoint, and from 144k on also on failed clips. Best checkpoint 184k (14.4 h): 0.923 return,
+  45 failed, 14x fewer failed clips than SONIC in our simulator. It beats SONIC on both counts from 5.1 h;
+  det-frac 0.25 got there sooner (3.9 h), because det-frac 0.5 still had 716 failed at 3.9 h.
+- After ~13 h single checkpoints vary more (176k, 192k, 204k at 0.89-0.91 between checkpoints at 0.92),
+  but there is no trend down and the critic loss stays at ~0.15. Picking a checkpoint by the 8,192-clip
+  subset works: the subset's best checkpoints are also the full set's best.
+- Against the paper (Fig. 2a; 3 H100-h is ~8 A6000-h): 0.94 with 25 failed at 3 H100-h, ~0.96 from 6 H100-h.
+  At 8.8 A6000-h we have 0.921/348, and our best is 0.923/45 at 14.4 A6000-h (~5.3 H100-h, where the paper is at
+  ~0.95): return 0.02-0.04 lower and ~2x the paper's 3-h failed count with ~1.8x its compute. Not reproduced,
+  and neither is the 2-GPU "0 failed".
+- C10/C12 in export_audit.py now report both fixed configurations (bdf = det-frac 0.5, bdf25 = det-frac 0.25);
+  C12's "both counts" time takes the earlier of the two (det-frac 0.25, 3.86 h).
+- No jobs left running; the BONES-SEED check-in series ends here.
