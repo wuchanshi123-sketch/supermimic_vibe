@@ -683,3 +683,38 @@ loss 0.079, J 6.51 — same as det-frac 0.25 at 16k).
   slightly behind det-frac 0.25; critic loss creeping up (0.105 -> 0.115), so the target critic does not
   remove the trend.
 Both have yet to pass det-frac 0.25's collapse point (170-188k).
+
+## Check-in 2026-10-25 00:48Z: det-frac 0.5 at 172k, EMA target critic stopped
+
+8,192-clip benchmark, return/failed (det-frac 0.25 at the same iterations in brackets):
+
+| it | det-frac 0.5 | det-frac 0.25 + EMA target critic | [det-frac 0.25] |
+| --- | --- | --- | --- |
+| 136k | 0.924/13 | 0.903/13 | 0.906/11 |
+| 144k | 0.922/2 | 0.893/15 | 0.914/9 |
+| 148k | 0.924/3 | 0.876/19 | 0.907/7 |
+| 156k | 0.924/6 | — | 0.909/4 |
+| 164k | 0.922/2 | — | 0.904/5 |
+| 168k | 0.923/2 | — | 0.897/4 |
+| 172k | 0.916/4 | — | 0.894/7 |
+| 180k / 188k | — | — | 0.876/4, 0.723/35 |
+
+Training statistics (mean over +-2k iterations):
+
+| it | det-frac 0.5: v_loss / J / gnorm / falls | EMA: v_loss / J / gnorm / falls | det-frac 0.25: v_loss / J / gnorm / falls |
+| --- | --- | --- | --- |
+| 140k | 0.098 / 6.79 / 0.030 / 2.1% | 0.150 / 7.14 / 0.043 / 4.4% | 0.110 / 6.79 / 0.030 / 5.0% |
+| 148k | 0.102 / 6.89 / 0.024 / 1.3% | 0.165 / 7.18 / 0.043 / 4.3% | 0.114 / 6.90 / 0.026 / 3.0% |
+| 156k | 0.106 / 6.91 / 0.024 / 1.2% | — | 0.122 / 6.95 / 0.027 / 3.7% |
+| 164k | 0.110 / 6.92 / 0.026 / 1.1% | — | 0.130 / 6.99 / 0.029 / 3.7% |
+| 172k | 0.120 / 6.97 / 0.026 / 1.3% | — | 0.150 / 7.00 / 0.031 / 4.3% |
+| 180k / 188k | — | — | 0.242, 0.566 / 7.09, 7.21 / 0.051, 0.106 / 3.9%, 3.7% |
+
+- det-frac 0.5 (13.5 h): acrobatic failures 4 -> 1-2 of 27 from 140k to 172k; failed clips 2-6 of 8,192.
+  Its critic loss is rising along the same path as det-frac 0.25 but ~20k iterations behind (0.120 at
+  172k vs 0.122 at 156k for 0.25), and the 172k benchmark dipped (0.916). The 170-190k test is not
+  decided yet.
+- det-frac 0.25 + EMA target critic (11.8 h, 149k): benchmark fell 0.903 -> 0.876 and failures rose 13 -> 19
+  from 136k to 148k while det-frac 0.25 held 0.91; critic loss 0.165 vs 0.114 at the same iteration;
+  handstands still all fail (6/6). The target critic does not slow the critic-loss growth; it is worse.
+  Stopped (scancel 31971049) to free the GPU; checkpoints kept.

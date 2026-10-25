@@ -280,8 +280,8 @@
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31970504",
 "status": "running",
-"iterations": 140900,
-"train_hours": 11.079,
+"iterations": 172700,
+"train_hours": 13.554,
 "log": "runs/bones_fix_detfrac50/log.jsonl",
 "evals": "runs/bones_fix_detfrac50/eval.jsonl"
 },
@@ -289,10 +289,10 @@
 "run": "bones_fix_detfrac_ema",
 "label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
 "figure": "Fig. 2a (diagnosis)",
-"slurm_job": "31971049",
-"status": "running",
-"iterations": 118200,
-"train_hours": 9.363,
+"slurm_job": "31971049 (stopped at 11.8 h)",
+"status": "stopped",
+"iterations": 149600,
+"train_hours": 11.821,
 "log": "runs/bones_fix_detfrac_ema/log.jsonl",
 "evals": "runs/bones_fix_detfrac_ema/eval.jsonl"
 }
