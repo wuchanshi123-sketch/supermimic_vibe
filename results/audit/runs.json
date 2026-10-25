@@ -279,9 +279,9 @@
 "label": "Fix test: 50% of envs collect without action noise (not in paper)",
 "figure": "Fig. 2a (diagnosis)",
 "slurm_job": "31970504",
-"status": "running",
-"iterations": 172700,
-"train_hours": 13.554,
+"status": "finished",
+"iterations": 204300,
+"train_hours": 15.999,
 "log": "runs/bones_fix_detfrac50/log.jsonl",
 "evals": "runs/bones_fix_detfrac50/eval.jsonl"
 },

@@ -718,3 +718,43 @@ Training statistics (mean over +-2k iterations):
   from 136k to 148k while det-frac 0.25 held 0.91; critic loss 0.165 vs 0.114 at the same iteration;
   handstands still all fail (6/6). The target critic does not slow the critic-loss growth; it is worse.
   Stopped (scancel 31971049) to free the GPU; checkpoints kept.
+
+## Check-in 2026-10-25 03:50Z: det-frac 0.5 passes 170-205k without collapse
+
+8,192-clip benchmark, return/failed (det-frac 0.25 at the same iterations in brackets):
+
+| it | det-frac 0.5 | [det-frac 0.25] |
+| --- | --- | --- |
+| 168k | 0.923/2 | 0.897/4 |
+| 172k | 0.916/4 | 0.894/7 |
+| 176k | 0.913/5 | 0.897/3 |
+| 180k | 0.901/4 | 0.876/4 |
+| 184k | 0.922/3 | 0.863/12 |
+| 188k | 0.909/2 | 0.723/35 |
+| 192k | 0.896/4 | — |
+| 196k | 0.920/1 | — |
+| 200k | 0.909/2 | — |
+| 204k | 0.891/5 | — |
+
+Training statistics, det-frac 0.5 (mean over +-2k iterations; det-frac 0.25 in brackets):
+
+| it | v_loss | J | gnorm | falls |
+| --- | --- | --- | --- | --- |
+| 172k | 0.119 [0.150] | 6.95 [7.00] | 0.027 [0.031] | 1.6% [4.3%] |
+| 180k | 0.126 [0.242] | 6.88 [7.09] | 0.038 [0.051] | 1.7% [3.9%] |
+| 188k | 0.151 [0.566] | 7.01 [7.21] | 0.035 [0.106] | 0.8% [3.7%] |
+| 196k | 0.150 | 6.96 | 0.045 | 1.4% |
+| 204k | 0.143 | 6.97 | 0.037 | 0.9% |
+
+- The collapse det-frac 0.25 had at 172-188k does not happen: the critic loss levels off at ~0.15 instead
+  of running away, failures stay at 1-5 of 8,192 and acrobatic failures at 1-3 of 27. The benchmark return
+  is noisier than before 170k (0.891-0.922 between checkpoints, vs 0.922-0.926 at 136-168k), so the best
+  checkpoints are around 140-170k and 184k/196k.
+- The run reached its 16 h training budget at 204,310 iterations (job COMPLETED); final 8,192-clip benchmark
+  0.916/2. Full benchmark of every 4th checkpoint + the last queued as job 31978709 (~13 min each).
+- MuJoCo Warp prints "nefc overflow - please increase njmax to 2xx" sporadically (njmax = 250 in
+  sim_env.py): ~1,300 times over the 204k iterations of this run, rising from ~1 per 8k iterations early
+  to 50-130 per 8k after full coverage, when resets concentrate on contact-rich clips (crawling, lying). The
+  faithful and det-frac 0.25 runs print it too (700-1,000 times). Each warning means a world that step had
+  more constraint rows than allocated, so some contacts were dropped for that step. At about 1 world-step in
+  10^7 it is negligible for training; not changed so runs stay comparable.

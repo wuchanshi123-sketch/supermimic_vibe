@@ -4383,6 +4383,87 @@
 "clips": 8192
 },
 {
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 176000,
+"hours": 13.8104,
+"norm_return": 0.9127,
+"failed": 5,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 180000,
+"hours": 14.1205,
+"norm_return": 0.9009,
+"failed": 4,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 184000,
+"hours": 14.4303,
+"norm_return": 0.9224,
+"failed": 3,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 188000,
+"hours": 14.7403,
+"norm_return": 0.9092,
+"failed": 2,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 192000,
+"hours": 15.0497,
+"norm_return": 0.8964,
+"failed": 4,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 196000,
+"hours": 15.3592,
+"norm_return": 0.9203,
+"failed": 1,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 200000,
+"hours": 15.6678,
+"norm_return": 0.9089,
+"failed": 2,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 204000,
+"hours": 15.9762,
+"norm_return": 0.8913,
+"failed": 5,
+"clips": 8192
+},
+{
+"run": "bones_fix_detfrac50",
+"label": "Fix test: 50% of envs collect without action noise (not in paper)",
+"iteration": 204310,
+"hours": 16.0,
+"norm_return": 0.9162,
+"failed": 2,
+"clips": 8192
+},
+{
 "run": "bones_fix_detfrac_ema",
 "label": "Fix test: det-frac 0.25 + EMA target critic for critic targets (not in paper)",
 "iteration": 4000,
