@@ -801,3 +801,13 @@ SONIC checkpoint in our simulator: 0.893/642.
 - C10/C12 in export_audit.py now report both fixed configurations (bdf = det-frac 0.5, bdf25 = det-frac 0.25);
   C12's "both counts" time takes the earlier of the two (det-frac 0.25, 3.86 h).
 - No jobs left running; the BONES-SEED check-in series ends here.
+
+## Videos 2026-10-25
+
+code/scripts/render_rollouts.py (slurm/render_rollouts.slurm) replays the benchmark protocol on chosen clips
+and renders the simulated robot (solid) over the reference (orange ghost). results/videos/ (MP4s gitignored):
+- lafan1/: main LAFAN1 run, ckpt 148k (0 of 40 failed), 15 s windows with the fastest reference motion of
+  dance2_subject1, fallAndGetUp1_subject1, jumps1_subject1, fightAndSports1_subject1 (clip returns 0.926-0.942).
+- bones/: det-frac 0.5 ckpt 184k (best full-benchmark checkpoint), whole clips: cartwheel 0.911, 360 flip 0.812,
+  handstand 0.762, hip-hop dance 0.935, crawl 0.961, spin 0.951, push-ups 0.907, and two failures (monkey jump,
+  terminated at 3.1 s; handstand jump, at 1.9 s). Per-clip returns match the benchmark's to within 0.007.
