@@ -808,6 +808,12 @@ code/scripts/render_rollouts.py (slurm/render_rollouts.slurm) replays the benchm
 and renders the simulated robot (solid) over the reference (orange ghost). results/videos/ (MP4s gitignored):
 - lafan1/: main LAFAN1 run, ckpt 148k (0 of 40 failed), 15 s windows with the fastest reference motion of
   dance2_subject1, fallAndGetUp1_subject1, jumps1_subject1, fightAndSports1_subject1 (clip returns 0.926-0.942).
-- bones/: det-frac 0.5 ckpt 184k (best full-benchmark checkpoint), whole clips: cartwheel 0.911, 360 flip 0.812,
-  handstand 0.762, hip-hop dance 0.935, crawl 0.961, spin 0.951, push-ups 0.907, and two failures (monkey jump,
+- bones/: det-frac 0.5 ckpt 184k (best full-benchmark checkpoint), whole clips: cartwheel 0.821, 360 flip 0.811,
+  handstand 0.761, hip-hop dance 0.935, crawl 0.961, spin 0.950, push-ups 0.907, and two failures (monkey jump,
   terminated at 3.1 s; handstand jump, at 1.9 s). Per-clip returns match the benchmark's to within 0.007.
+  (2026-10-28: the first cartwheel clip, cartwheelin_003__A486, turned out to be only the approach to a cartwheel,
+  with no inversion; replaced by cartwheel_R_001__A135_M, whose reference goes fully upside down.)
+- Upside-down motions (code/scripts/dev/find_inversions.py; reference pelvis z axis below horizontal, R22 < -0.5):
+  402 of 128,904 clips. At 184k the policy completes 389 of them (13 of the 45 failures), but their mean return is
+  0.645 vs 0.923 for the other 128,502 clips. In the videos the robot gets over in cartwheels, flips and
+  handstands but lags the reference while inverted and lands off to the side.
