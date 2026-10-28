@@ -1,0 +1,116 @@
+{
+ "ckpt": "runs/bones_fix_detfrac50/ckpt_0184000.pt",
+ "it": 184000,
+ "hours": 14.430323355396588,
+ "title": "SuperMimic on BONES-SEED (det-frac 0.5, 1 A6000, 14.4 h)",
+ "clips": [
+  {
+   "clip": "cartwheel_R_001__A135_M",
+   "norm_return": 0.8209164142608643,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 7.1,
+   "window_s": [
+    0.0,
+    7.1
+   ],
+   "video": "cartwheel_R_001__A135_M.mp4"
+  },
+  {
+   "clip": "flip_360_002__A304_M",
+   "norm_return": 0.8108798265457153,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 8.32,
+   "window_s": [
+    0.0,
+    8.32
+   ],
+   "video": "flip_360_002__A304_M.mp4"
+  },
+  {
+   "clip": "handstand_idle_stop_002__A305_M",
+   "norm_return": 0.7610488533973694,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 6.12,
+   "window_s": [
+    0.0,
+    6.12
+   ],
+   "video": "handstand_idle_stop_002__A305_M.mp4"
+  },
+  {
+   "clip": "dance_hiphop_stick_n_roll_dancehall_R_002__A311_M",
+   "norm_return": 0.9351760745048523,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 7.26,
+   "window_s": [
+    0.0,
+    7.26
+   ],
+   "video": "dance_hiphop_stick_n_roll_dancehall_R_002__A311_M.mp4"
+  },
+  {
+   "clip": "idle_crawl_start_001__A128_M",
+   "norm_return": 0.9612211585044861,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 11.54,
+   "window_s": [
+    0.0,
+    11.54
+   ],
+   "video": "idle_crawl_start_001__A128_M.mp4"
+  },
+  {
+   "clip": "fancy_spin_R_001__A431",
+   "norm_return": 0.949715256690979,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 6.86,
+   "window_s": [
+    0.0,
+    6.86
+   ],
+   "video": "fancy_spin_R_001__A431.mp4"
+  },
+  {
+   "clip": "push_up_loop_003__A361",
+   "norm_return": 0.9068772196769714,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 8.02,
+   "window_s": [
+    0.0,
+    8.02
+   ],
+   "video": "push_up_loop_003__A361.mp4"
+  },
+  {
+   "clip": "monkey_jump_001__A304",
+   "norm_return": 0.4606265425682068,
+   "failed": true,
+   "fail_time_s": 3.08,
+   "clip_seconds": 5.42,
+   "window_s": [
+    0.0,
+    5.42
+   ],
+   "video": "monkey_jump_001__A304.mp4"
+  },
+  {
+   "clip": "handstand_jump_103__A305",
+   "norm_return": 0.15011084079742432,
+   "failed": true,
+   "fail_time_s": 1.94,
+   "clip_seconds": 6.42,
+   "window_s": [
+    0.0,
+    6.42
+   ],
+   "video": "handstand_jump_103__A305.mp4"
+  }
+ ]
+}

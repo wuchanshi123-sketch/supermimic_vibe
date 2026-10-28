@@ -1,0 +1,56 @@
+{
+ "ckpt": "runs/smimic_lafan1_1gpu/ckpt_0148000.pt",
+ "it": 148000,
+ "hours": 11.417814828091197,
+ "title": "SuperMimic on LAFAN1 (1 A6000, ckpt 148k)",
+ "clips": [
+  {
+   "clip": "dance2_subject1",
+   "norm_return": 0.9283926486968994,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 225.68,
+   "window_s": [
+    119.38,
+    134.38
+   ],
+   "video": "dance2_subject1.mp4"
+  },
+  {
+   "clip": "fallAndGetUp1_subject1",
+   "norm_return": 0.926124095916748,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 168.2,
+   "window_s": [
+    108.14,
+    123.14
+   ],
+   "video": "fallAndGetUp1_subject1.mp4"
+  },
+  {
+   "clip": "jumps1_subject1",
+   "norm_return": 0.94244384765625,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 244.44,
+   "window_s": [
+    46.24,
+    61.24
+   ],
+   "video": "jumps1_subject1.mp4"
+  },
+  {
+   "clip": "fightAndSports1_subject1",
+   "norm_return": 0.9383226037025452,
+   "failed": false,
+   "fail_time_s": null,
+   "clip_seconds": 245.14,
+   "window_s": [
+    56.94,
+    71.94
+   ],
+   "video": "fightAndSports1_subject1.mp4"
+  }
+ ]
+}

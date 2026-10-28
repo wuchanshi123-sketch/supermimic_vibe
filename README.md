@@ -9,25 +9,37 @@ SuperMimic fits one MLP world model to replayed simulator transitions and trains
 motion-tracking policy by backpropagating through 32 imagined steps of that frozen model,
 with a small critic bootstrapping the tail of each imagined rollout.
 
-## Results so far (one RTX A6000; the paper used one H100)
+## Results (one RTX A6000; the paper used one H100)
 
-Benchmark: every LAFAN1 clip played once from its first frame, friction 1.0, no randomization
-or noise; normalized return = reward sum / maximum possible; a clip fails on termination.
-Hours are training wall-clock with evaluation excluded, as in the paper.
+Benchmark (paper App. F): every clip played once from its first frame, friction 1.0, no
+randomization or noise, deterministic policy; normalized return = reward sum / maximum possible;
+a clip fails on termination. Hours are training wall-clock with evaluation excluded, as in the
+paper. An A6000 runs a SuperMimic iteration about 2.7x slower than an H100.
 
 | Claim (paper ref.) | Paper | Ours | Status |
 | --- | --- | --- | --- |
-| SuperMimic reaches 0.82 on LAFAN1 within 1.2 h on one GPU (Fig. 3a) | 0.82 in 1.2 h; 0.866 at 3 h | 0.833 at 1.34 h; 0.946, 0/40 failed at 12 h | reproduced |
-| PPO-Sim on one GPU stays far below (Fig. 3a) | 0.60 after 18 h | 0.52-0.55 at 17-17.5 h | reproduced (final pending) |
+| SuperMimic reaches 0.82 on LAFAN1 within 1.2 h on one GPU (Fig. 3a) | 0.82 in 1.2 h; 0.866 at 3 h | 0.833 at 1.34 h; best 0.947, 0/40 failed at 11.4 h | reproduced |
+| PPO in the simulator on one GPU stays far below (Fig. 3a) | 0.60 after 18 h | 0.543 after 18 h | reproduced |
 | Without the critic, H <= 16 fails (Fig. 3b) | H=16: 0.25 | H=16: best 0.035, 40/40 failed | reproduced |
 | With the critic, H=16 matches critic-free H=32 (Fig. 3b) | 0.843 vs 0.84 | 0.905 vs 0.899 | reproduced |
-| H=32 is fastest to 0.82; long horizons cost more (Fig. 3c) | 0.88 h / 1.70 h / 4.62 h (H=32/64/128) | 1.34 h / 3.31 h / not yet (H=32/64/128) | partly reproduced |
+| H=32 is fastest to 0.82; long horizons cost more (Fig. 3c) | 0.88 h / 1.70 h / 4.62 h (H=32/64/128) | 1.34 h / 3.31 h / not reached in 6 h (H=32/64/128) | partly reproduced |
 | World-model rollouts beat MuJoCo Warp (Fig. 4a) | 11-26x at 2k-16k envs | 15-22x at 2k-16k envs | reproduced (32k+ envs exceed host RAM here) |
-| BPTT needs far fewer imagined steps than PPO on the same world model (Fig. 4b) | 64x at return 0.84 | 27x at PPO-WM's best return (0.33) | partly reproduced |
+| BPTT needs far fewer imagined steps than PPO on the same world model (Fig. 4b) | 64x at return 0.84 | 27x at PPO's best return in the world model (0.33) | partly reproduced |
 | The critic policy recovers from 0.5-4 m/s pushes (Sec. 5.3) | settles in 0.5-2.4 s | 6/64 falls vs 19/64 without critic | partly reproduced |
-| RL velocity encoder beats distillation in a step test (Sec. 5.5) | 650 of 672 commands | 659 of 672 (smoke run, final pending) | in progress |
-| 129,514 BONES-SEED motions vs SONIC (Fig. 2, Table A.4) | 25 vs 179 failed | — | blocked: dataset is license-gated |
+| RL velocity encoder beats distillation in a step test (Sec. 5.5) | 650 of 672 commands | 652 of 672 | reproduced |
+| BONES-SEED filtering (App. E) | 142,220 -> 129,514 clips | 142,220 -> 128,904 clips (261.3 h) | reproduced |
+| One GPU beats SONIC on BONES-SEED (Fig. 2a, Table A.4) | 0.94, 25 failed at 3 H100-h vs SONIC 0.90, 179 | SONIC in our simulator 0.893, 642 failed. Paper-faithful: passes SONIC's return at 3.0 h, both counts at 4.3 h (0.906, 637), collapses after ~6 h. With 50% of environments collecting without exploration noise (not in the paper): best 0.923, 45 failed at 14.4 h, no collapse in 16 h | partly reproduced |
+| Two GPUs reach 0 failed clips on BONES-SEED (Fig. 2a) | 0 failed at 9.8 h | best 0.909, 791 failed, then declined | not reproduced |
+| Compute to target grows slowly with library size (Fig. 2b,c) | 0.54 -> 1.89 H100-h from 1 h to 264 h | 1.41 -> 2.06 A6000-h to 0.88 from 1 h to 261 h | partly reproduced |
+| >1000x fewer GPU-hours than SONIC (Sec. 5.1) | 3 GPU-h vs ~21,000 | 3.04 A6000-h to pass SONIC's return vs ~21,000 L40-h | reproduced |
+| PPO in the simulator on 4 / 8 GPUs (Fig. 3a) | 0.70 / 0.72 | not run | not attempted |
 | Real-robot transfer (Sec. 5.4) | 4 motions | — | out of scope |
+
+On BONES-SEED the policy completes 389 of the 402 clips whose reference turns upside down
+(cartwheels, flips, handstands, rolls), but tracks them less closely (mean return 0.645 vs 0.923
+for all other clips). Rendered rollouts (robot over a translucent reference) come from
+`code/scripts/render_rollouts.py`; `results/videos/*/summary.json` lists the rendered clips and
+their returns (the MP4s are not in git).
 
 The running log with every number, date and caveat is [`notes/RESULTS.md`](notes/RESULTS.md);
 every place where the implementation follows the paper, fills a gap, or deviates is listed in
@@ -42,7 +54,7 @@ in `results/audit/*.json` (rebuilt by `code/scripts/export_audit.py`).
 | `code/scripts/` | data preparation, push and step tests, rollout benchmark, run status, plots, audit export |
 | `code/scripts/dev/` | sanity checks (FK vs MuJoCo) and profilers |
 | `slurm/` | batch scripts for every experiment |
-| `results/` | small result files |
+| `results/` | small result files, audit export (`results/audit/`), rendered-clip summaries (`results/videos/`) |
 | `notes/` | implementation notes, results log, SONIC evaluation notes |
 
 Data (`data/`), runs and checkpoints (`runs/`) and the paper source (`paper/`) are not in git.
@@ -70,8 +82,15 @@ $SMIMIC_PY code/scripts/prepare_motions.py --format lafan --fps-in 30 \
   --input data/raw/lafan1_g1 --output data/processed/lafan1_50hz.npz
 ```
 
-BONES-SEED needs a Hugging Face account that accepted its license:
-`HF_TOKEN=... sbatch slurm/download_bones.slurm`, then `code/scripts/filter_bones.py`.
+BONES-SEED (`bones-studio/seed`, 23.5 GB for the G1 retarget) needs a Hugging Face account
+that accepted its license. Download and convert it, apply the App. E filter, and cut the nested
+subsets for the library-size sweep:
+
+```bash
+HF_TOKEN=... sbatch slurm/download_bones.slurm   # -> data/processed/bones_seed_raw_50hz.npz
+sbatch slurm/filter_bones.slurm data/processed/bones_seed_raw_50hz.npz data/processed/bones_seed_50hz.npz results/bones_filter.json
+sbatch slurm/make_subsets.slurm                  # -> data/processed/bones_seed_sub_{1,7,40}h.npz
+```
 
 ## Running the experiments
 
@@ -103,6 +122,23 @@ sbatch slurm/train_ppowm.slurm --out runs/f4b_ppowm_16kx32 --clip-prefixes walk,
 sbatch slurm/train_velocity.slurm --out runs/vel_rl --vel-mode rl --clip-prefixes walk,run,sprint --iterations 100000 --eval-every 8000 --ckpt-every 8000
 sbatch slurm/train_velocity.slurm --out runs/vel_distill --vel-mode distill --clip-prefixes walk,run,sprint --iterations 100000 --eval-every 8000 --ckpt-every 8000
 sbatch slurm/step_test.slurm results/step_test.json runs/vel_rl/last.pt runs/vel_distill/last.pt
+```
+
+BONES-SEED (Fig. 2) and the SONIC baseline:
+
+```bash
+# Paper-faithful run, scored on all clips by a second job while it trains
+sbatch slurm/train_supermimic.slurm --motions data/processed/bones_seed_50hz.npz --out runs/smimic_bones_1gpu --wall-hours 16 --iterations 320000 --eval-every 0 --ckpt-every 4000
+sbatch slurm/eval_watch.slurm runs/smimic_bones_1gpu data/processed/bones_seed_50hz.npz
+# Best fixed configuration: half the environments collect without exploration noise (not in the paper);
+# benchmarks a fixed 8,192-clip subset every 4000 iterations
+sbatch slurm/train_supermimic.slurm --motions data/processed/bones_seed_50hz.npz --out runs/bones_fix_detfrac50 --det-frac 0.5 --wall-hours 16 --iterations 320000 --eval-every 4000 --ckpt-every 4000 --eval-clips 8192
+# Score every 4th checkpoint on all 128,904 clips (~13 min per checkpoint)
+sbatch --time=04:00:00 slurm/eval_runs.slurm runs/bones_fix_detfrac50:data/processed/bones_seed_50hz.npz:eval_full.jsonl:4
+# SONIC's released checkpoint (ONNX weights converted by code/scripts/convert_sonic.py)
+sbatch slurm/eval_sonic.slurm data/processed/bones_seed_50hz.npz results/sonic_bones_gains.json gains
+# Videos of chosen clips
+sbatch slurm/render_rollouts.slurm --ckpt runs/bones_fix_detfrac50/ckpt_0184000.pt --motions data/processed/bones_seed_50hz.npz --clips cartwheel_R_001__A135_M,flip_360_002__A304_M --out results/videos/bones
 ```
 
 Evaluation and tests:
