@@ -12,3 +12,6 @@ __pycache__/
 # Notes for the private audit dashboard tooling.
 notes/AUDIT_DASHBOARD.md
 *.mp4
+
+# Project-local Python environment.
+.venv/

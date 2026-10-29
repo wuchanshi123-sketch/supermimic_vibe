@@ -162,3 +162,65 @@ wall-clock comparisons here are tilted toward PPO-Sim. MLPs run in bf16 autocast
 Built on [mjlab](https://github.com/mujocolab/mjlab), MuJoCo Warp and the BeyondMimic
 motion-tracking setup. All credit for the method goes to the SuperMimic authors; errors in this
 re-implementation are ours.
+
+
+## Local RTX 5090 D v2 (24 GB) setup
+
+This checkout has a project-local Conda environment at `.venv`, cloned offline from
+`amp_mjlab`. The source environment is unchanged. The local compatibility versions
+are recorded in `requirements.local.txt` and `runs/setup/environment.json`; they
+differ from the original `requirements.txt`. Use the launchers below without
+activating another environment. They select this checkout's Python package and caches.
+
+The existing 40-clip G1 CSV dataset is linked at `data/raw/lafan1_g1`. Rebuild the
+50 Hz library with `bash scripts/prepare_lafan1_local.sh` if needed.
+
+```bash
+bash scripts/train_lafan1_24gb.sh smoke  # 200 iterations; checks the full update loop
+bash scripts/train_lafan1_24gb.sh train  # 2,000 iterations; a bounded initial run
+bash scripts/evaluate_lafan1_24gb.sh runs/lafan1_24gb_train
+```
+
+Both training modes use 1,024 simulator environments, 1,000 replay steps per
+environment, 512 world-model windows, 512 imagined rollouts, k=8 and H=32. Automatic
+evaluation is disabled; run it separately after training. Initial Torch/Warp
+compilation can take several minutes and is cached. These small runs validate the
+training pipeline, not the paper's final tracking score.
+
+Resume the initial run with a larger iteration limit:
+
+```bash
+bash scripts/train_lafan1_24gb.sh train \
+  --resume runs/lafan1_24gb_train/last.pt --iterations 20000
+```
+
+Choose a fresh output directory with `--out runs/<new-name>` for an independent run.
+Reusing an existing output directory without `--resume` starts new weights and
+appends to its log.
+
+
+### Native live playback
+
+On the Linux desktop, open a MuJoCo window with a live policy/physics loop:
+
+```bash
+bash scripts/play_lafan1_24gb.sh --clip walk1_subject1
+# Use a particular snapshot and overlay the reference at its true world position:
+bash scripts/play_lafan1_24gb.sh --ckpt runs/lafan1_24gb_train/last.pt --clip dance2_subject1 --reference-offset 0
+```
+
+The solid robot executes the checkpoint in one MuJoCo-Warp environment. The orange
+reference is a display-only copy, offset by 1 m along Y by default; use
+`--reference-offset 0` for an overlay. Noise and randomization are disabled.
+The window shows the loaded iteration, clip/time, status, root error and accumulated
+return divided by the full clip's maximum (partial until playback ends).
+
+Keys: Space pauses/resumes; R restarts; N/P switches clips; L reloads the latest saved
+checkpoint; +/- changes target playback speed; F toggles camera following; G toggles
+the reference; Q/Esc closes the window. Mouse controls rotate/zoom the camera.
+End/failure poses are held for 2 seconds, then the same clip restarts; `--no-loop`
+holds the final pose, while `--auto-next` cycles the selectable clips. Use
+`--clips walk1_subject1,dance2_subject1` to restrict the selectable set.
+
+For diagnostics, `--duration 5 --report runs/setup/live_gui.json` closes the window
+after 5 wall-seconds; `--headless --max-steps 10` checks the loop without a window.

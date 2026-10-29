@@ -191,7 +191,7 @@ def main():
     a = pick_window(ref[:, i], L, win)
     b = min(L, a + win)
     az = yaw_deg(ref[a, i, 3:7]) + 125.0
-    look = robot[a, i, :3].copy()
+    look = robot[min(a, int(nframes[i]) - 1), i, :3].copy()
     frames = []
     for t in range(a, b):
       tr = min(t, int(nframes[i]) - 1)  # after a termination the robot freezes at its last state
