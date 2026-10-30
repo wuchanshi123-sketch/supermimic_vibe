@@ -224,3 +224,216 @@ holds the final pose, while `--auto-next` cycles the selectable clips. Use
 
 For diagnostics, `--duration 5 --report runs/setup/live_gui.json` closes the window
 after 5 wall-seconds; `--headless --max-steps 10` checks the loop without a window.
+
+
+## From-scratch AMP walking
+
+This is an independent flat-ground velocity-command task, inspired by the local
+`supermimic_AMP` implementation. Training uses a learned world model and BPTT,
+with an adversarial motion prior as a differentiable style reward. A fresh run
+randomly initializes the actor, critic, world model and discriminator. There is
+no teacher, pretrained policy, tracking checkpoint or old AMP normalizer to load.
+
+The command actor receives four time-ordered frames of 96 values (gyro, gravity,
+velocity command, joint position/velocity, previous clean action), totaling 384.
+It receives no future reference poses or reference phase. The discriminator uses
+195 body features per frame (390 per transition), defined relative to the torso
+and each body's local velocities. Expert features are recomputed with this
+checkout's G1 FK. The least-squares discriminator and zero-centered gradient
+penalty train on real policy/expert transitions; actor gradients pass through its
+frozen parameters. Running statistics are updated from raw features, and the
+gradient penalty uses normalized expert-pair coordinates.
+
+### Expert data
+
+The prepared library is `data/processed/amp_walk_50hz.npz`: 11 walking, side-step,
+and idle-turn clips, 5,370 frames at 50 Hz. It is self-contained at training time.
+To rebuild from the local reference project's WalkandRun NPZ files:
+
+```bash
+bash scripts/prepare_amp_walk.sh
+# For another source directory: AMP_EXPERT_DIR=/path/to/WalkandRun bash scripts/prepare_amp_walk.sh
+```
+
+Existing outputs are protected. Use `--overwrite` only when intentionally
+rebuilding the library; its JSON manifest lists the source clips and layout.
+Half the training resets use expert physical states, half use nominal standing.
+This reference-state initialization is not a weight warm-start. Set
+`--rsi-probability 0` to use standing resets only. Recovery clips are not included.
+
+### Training and continuation
+
+```bash
+bash scripts/train_amp_walk_24gb.sh smoke
+bash scripts/train_amp_walk_24gb.sh train
+# Continue a run started with the current preset, using a larger total limit:
+bash scripts/train_amp_walk_24gb.sh train --resume runs/amp_walk_24gb_train/last.pt --iterations 100000
+# Or continue the verified best model into a separate output directory:
+bash scripts/train_amp_walk_24gb.sh train --resume runs/amp_walk_best/best.pt --out runs/amp_walk_best_continue --iterations 100000
+```
+
+The 24 GB training preset matches the final learning/task settings in
+`runs/amp_walk_best/training_config.json`: 4,096 environments, a 1,000-step replay,
+512 WM windows per batch, 10 WM batches per update, 256 imagined rollouts,
+H=32, k=8, FP32, and 512 discriminator pairs per batch. The iteration limit is
+50,000. The first 500 iterations train only the world model and discriminator;
+the actor and critic are then enabled.
+
+The preset uses actor LR scale 0.5, linear velocity reward width 0.25,
+action-rate weight -0.1, forward commands 0.2–0.8 m/s, and 10% standing commands.
+Discriminator positives come from `walk_forward_` clips: 50% original pairs and
+50% time-scaled moving pairs at 0.4/0.6/0.8 speed. The command style gate is 0.2;
+foot-slip reward remains disabled. Expert selection affects discriminator
+positives; reference-state resets still use the prepared motion library.
+
+A fresh run uses these final settings from random weights. It does not replay
+the best model's earlier curriculum stages or automatically load its checkpoint.
+Older runs using the previous defaults need matching reward/command options
+when resumed; use `--allow-reward-change true` only for an intentional curriculum
+change. Choose a new `--out` for a fresh run if the default directory already
+contains a checkpoint. Command-line options appended to the script override its
+preset values.
+
+The smoke preset uses the same task/style settings with H=8, 64 environments,
+20 world-model-only iterations and an 80-iteration limit for a short integration
+check.
+
+Compared with the teacher-anchored reference, the scratch task uses explicit
+upright reward, linear/yaw reward widths of 0.25/0.5, bounded actions, a bounded
+critic bootstrap/target, and 25% noise-free collection alongside noisy actions.
+These options are saved in `config.json`; no exact parity with the teacher-anchored reference is
+claimed. The verified local walking checkpoint is documented below. Task terms are scaled by dt; style is already a per-control-step reward.
+The mixed reward is 0.75 task + 0.25 style, with style scale 0.1.
+
+Outputs live in `runs/amp_walk_24gb_train/`: `log.jsonl`, `tb/`, numbered
+checkpoints, and `last.pt`. Checkpoints include all four networks, normalization,
+optimizers, stage counters, RNG, initial random-weight hashes and expert-library
+hash. Resume restores learning state and refills replay from new episodes; it
+does not restore the exact physics/replay state. Other checkpoint formats and
+changed reward/model semantics are rejected. A fresh run refuses an existing
+`last.pt`; use `--resume` or a new `--out`. Ctrl+C saves `last.pt` gracefully.
+
+```bash
+.venv/bin/python -m tensorboard.main --logdir runs/amp_walk_24gb_train/tb
+bash scripts/test_amp_walk.sh
+```
+
+### Command evaluation and native playback
+
+```bash
+bash scripts/evaluate_amp_walk.sh runs/amp_walk_24gb_train/last.pt --seconds 20 --num-envs 32
+bash scripts/play_amp_walk_24gb.sh --ckpt runs/amp_walk_24gb_train/last.pt --command 0.5,0,0
+```
+
+Evaluation starts from nominal standing with no reference-state initialization,
+noise or domain randomization. Read survival/falls/coverage together with planar
+and yaw errors: low error before an early fall is not successful walking. The
+32 copies share the same initial state and are not independent seeds. This is
+a locomotion task, so it does not report LAFAN1 tracking return or clip success.
+
+Playback has no reference ghost or motion phase. Keys W/S change forward speed,
+A/D change lateral speed, Z/C change yaw rate, X sets zero command, Space pauses,
+R resets to standing, L reloads the latest saved AMP actor, F toggles follow,
++/- changes playback speed, and Q/Esc quits. Mouse controls rotate/zoom.
+
+### F710 velocity commands
+
+`bash scripts/play_amp_walk_24gb.sh` automatically detects a Logitech F710 on
+Linux. It selects the controller by identity and kernel axis mapping, so an
+unrelated `/dev/input/js0` is not mistaken for the gamepad. Playback prefers
+`runs/amp_walk_best/best.pt` when available; `--ckpt` selects a specific model.
+
+| Control | Command |
+| --- | --- |
+| Left stick up/down | Forward/backward velocity, default range −0.5 to +0.8 m/s |
+| Left stick left/right | Left/right velocity, default range ±0.5 m/s |
+| Right stick left/right | Counterclockwise/clockwise yaw rate, default range ±1 rad/s |
+| A | Zero command and reset to standing |
+| B | Zero command |
+| Start | Pause/resume simulation |
+| Keyboard G | Switch between keyboard and gamepad control |
+
+Center the sticks when connecting/reconnecting, and after A/B, before commanding
+motion. The default deadzone is 0.15 and the remaining stick travel is rescaled
+continuously. Removing the active controller zeros the command. Keyboard
+W/S/A/D/Z/C/X takes over immediately; press G to return to the controller.
+Continuous stick changes respect the existing hold period after a fall.
+
+```bash
+# Inspect device identity and mapping without starting the simulator:
+bash scripts/play_amp_walk_24gb.sh --list-gamepads
+# Show controller commands for 10 seconds, without a GPU simulation or window:
+bash scripts/play_amp_walk_24gb.sh --test-gamepad --duration 10
+# Optional device, deadzone and speed limits:
+bash scripts/play_amp_walk_24gb.sh --gamepad-device /dev/input/js1 \
+  --gamepad-deadzone 0.12 --gamepad-forward-speed 0.6 --gamepad-yaw-speed 0.6
+# Preserve a fixed command / keyboard-only input:
+bash scripts/play_amp_walk_24gb.sh --gamepad off --command 0.5,0,0
+```
+
+`--gamepad on` starts with a zero command while waiting for a controller;
+`--gamepad auto` is the default and retains keyboard playback when no F710 is
+available. The input reader uses the read-only, nonblocking
+[Linux joydev event interface](https://www.kernel.org/doc/html/latest/input/joydev/joystick-api.html)
+and adds no Python package dependency.
+
+
+### Verified local AMP walking checkpoint
+
+The supervised local run selected the H=32 iteration-42000 checkpoint at
+`runs/amp_walk_best/best.pt`. Across forward commands 0.3, 0.5 and 0.8 m/s,
+192/192 perturbed trials survived 30 seconds; all 64 low-speed trials retained
+alternating steps, and 64/64 completed a continuous 40-second command sequence.
+Details, videos, configuration and validation reports are in
+`runs/amp_walk_best/REPORT.md`; the experiment journal is `notes/AMP_TRAINING.md`.
+
+```bash
+bash scripts/play_amp_walk_24gb.sh --ckpt runs/amp_walk_best/best.pt --command 0.3,0,0
+```
+
+
+### Optional high-speed contact refinement
+
+The local validated candidate is saved separately at
+`runs/amp_contact_refine_20261030/selected/refined.pt`; the original
+`runs/amp_walk_best/best.pt` is preserved. The report is
+`runs/amp_contact_refine_20261030/report.html`, including all attempted settings
+and a second reset-seed validation. Its 0.8 m/s loaded-contact penetration P95
+improves modestly (about 2%), and yaw-rate MAE improves about 51%, while low-speed
+alternating steps remain intact. This is not a universal physical improvement:
+per-foot-time peak penetration and high-speed velocity RMSE have trade-offs.
+
+Refinement adds optional nonpositive task terms for yaw-rate error, downward
+foot-point speed near the ground, and penetration beyond a 0.5 mm allowance.
+Foot costs use the actual sphere/capsule collision geometry and rigid-body point
+velocities; they are differentiable geometric/kinematic proxies, not contact
+force predictions. A command-speed gate ramps from zero at 0.5 m/s to one at
+0.8 m/s. Real simulator evaluation still measures actual constraint contacts.
+All new task weights default to zero for existing checkpoints and fresh runs.
+
+`--low-speed-anchor-weight` optionally adds a training-only action consistency
+loss on real replay start observations. It requires resuming this project's AMP
+checkpoint and freezes that actor and its observation normalizer as a reference.
+The reference is serialized, hash-checked and retained across future resumes;
+inference still uses a single ordinary CommandActor. The existing
+`--allow-reward-change true` guard also covers intentional changes to this
+training regularizer.
+
+```bash
+# View the separately saved candidate:
+bash scripts/play_amp_walk_24gb.sh --ckpt runs/amp_contact_refine_20261030/selected/refined.pt --command 0.8,0,0
+
+# Continue with the candidate's reward and regularizer settings in a new output:
+bash scripts/train_amp_walk_24gb.sh train \
+  --resume runs/amp_contact_refine_20261030/selected/refined.pt \
+  --out runs/amp_contact_refine_continue --iterations 50000 \
+  --actor-lr-scale 0.25 --yaw-rate-weight -4 \
+  --foot-landing-weight -0.4 --foot-penetration-weight -0.1 \
+  --low-speed-anchor-weight 1.0
+```
+
+The selected checkpoint is iteration 43250, following 1000 iterations
+with low-speed retention and 250 further iterations with stronger
+contact costs. Its full configuration, provenance and two evaluation reports
+are saved beside `refined.pt`. Further training is not assumed to improve it;
+compare saved checkpoints using the same contact and gait measurements.

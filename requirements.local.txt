@@ -15,3 +15,4 @@ tyro==1.0.15
 mediapy==1.2.6
 setuptools==81.0.0
 imageio-ffmpeg==0.6.0
+tensorboard==2.20.0

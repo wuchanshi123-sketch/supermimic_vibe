@@ -13,3 +13,4 @@ trimesh
 prettytable
 tyro
 mediapy
+tensorboard
